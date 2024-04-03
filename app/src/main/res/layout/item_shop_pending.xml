@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_marginHorizontal="12dp"
+    android:paddingVertical="8dp"
+    android:paddingHorizontal="12dp"
+    android:layout_marginBottom="8dp"
+    android:background="@drawable/shop_pending_border"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/shopPending_tvName"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="OldSpiceOffical"
+            android:layout_weight="1"
+            android:fontFamily="@font/roboto_bold"
+            android:textSize="20sp"/>
+
+        <ImageButton
+            android:id="@+id/shopPending_btnInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/transparent"
+            app:srcCompat="@drawable/icon_info" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/transparent"
+            android:layout_marginRight="12dp"
+            app:srcCompat="@drawable/icon_calendar_blue_20" />
+        <TextView
+            android:id="@+id/shopPending_tvDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="24-03-2024"
+            android:fontFamily="@font/roboto_regular"
+            android:textSize="16sp"/>
+
+
+    </LinearLayout>
+</LinearLayout>

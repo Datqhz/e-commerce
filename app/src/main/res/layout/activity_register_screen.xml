@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".RegisterScreen">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        android:src="@drawable/register" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="100dp"
+        android:gravity="right"
+        android:layout_marginRight="26dp"
+        >
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/shop_logo_nonbackground"/>
+        <TextView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/primaryColor"
+            android:fontFamily="@font/roboto_medium"
+            android:textSize="34dp"
+            android:text="Đăng ký"
+            />
+    </LinearLayout>
+    <TextView
+        android:id="@+id/tvNavToSI"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="80dp"
+        android:layout_marginLeft="26dp"
+        android:text="Đăng nhập"
+        android:fontFamily="@font/roboto_bold"
+        android:textColor="@color/white"
+        android:textSize="20dp"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="280dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="260dp">
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            app:cardBackgroundColor="@color/white"
+            android:layout_marginHorizontal="12dp"
+            app:cardElevation="8dp"
+            app:cardCornerRadius="20dp"
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="20dp"
+                android:paddingVertical="40dp"
+                android:orientation="vertical">
+                <EditText
+                    android:id="@+id/edtDisplayName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/person_primary_24"
+                    android:layout_marginHorizontal="20dp"
+                    android:hint="Tên hiển thị"
+                    android:drawablePadding="12dp"
+                    android:fontFamily="@font/roboto_regular"
+                    android:layout_marginBottom="16dp"
+                    android:padding="4dp"
+                    android:background="@drawable/edt_background" />
+                <EditText
+                    android:id="@+id/edtUsername"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/outline_local_phone_24"
+                    android:layout_marginHorizontal="20dp"
+                    android:hint="Số điện thoại"
+                    android:drawablePadding="12dp"
+                    android:fontFamily="@font/roboto_regular"
+                    android:layout_marginBottom="16dp"
+                    android:padding="4dp"
+                    android:background="@drawable/edt_background" />
+
+                <EditText
+                    android:id="@+id/edtPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginBottom="12dp"
+                    android:inputType="textPassword"
+                    android:background="@drawable/edt_background"
+                    android:drawableLeft="@drawable/outline_lock_primary_24"
+                    android:drawablePadding="12dp"
+                    android:fontFamily="@font/roboto_regular"
+                    android:hint="Mật khẩu"
+                    android:padding="4dp" />
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/btnSignUp"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="470dp"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/login_button"
+        app:backgroundTint="@color/primaryColor"
+        android:text="Đăng ký"
+        android:fontFamily="@font/roboto_bold"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/primaryColor"
+        />
+    <Button
+        android:id="@+id/btnSwitchSU"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="30dp"
+        android:layout_marginLeft="20dp"
+        android:background="@drawable/rectangle_button"
+        app:backgroundTint="@color/primaryColor"
+        android:text="Đăng ký với SDT"
+        android:fontFamily="@font/roboto_bold"
+        android:textColor="@color/primaryColor"
+        android:backgroundTint="@color/primaryColor"
+        />
+</RelativeLayout>

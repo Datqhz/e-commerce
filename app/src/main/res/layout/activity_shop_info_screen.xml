@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ShopInfoScreen">
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="100dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/shopInfoScreen_tvShopName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_regular"
+                android:paddingHorizontal="20dp"
+                android:paddingVertical="12dp"
+                android:text="Tên shop: OldSpiceOffical"
+                android:textColor="@color/black"
+                android:textSize="15dp" />
+
+            <TextView
+                android:id="@+id/shopInfoScreen_tvCCCD"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_regular"
+                android:paddingHorizontal="20dp"
+                android:paddingVertical="12dp"
+                android:text="Số CCCD: 032549896"
+                android:textColor="@color/black"
+                android:textSize="15dp" />
+
+            <TextView
+                android:id="@+id/shopInfoScreen_tvPhoneNumber"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_regular"
+                android:paddingHorizontal="20dp"
+                android:paddingVertical="12dp"
+                android:text="SDT: 032455452"
+                android:textColor="@color/black"
+                android:textSize="15dp" />
+
+            <TextView
+                android:id="@+id/shopInfoScreen_tvEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_regular"
+                android:paddingHorizontal="20dp"
+                android:paddingVertical="12dp"
+                android:text="Email: baam036@gmail.com"
+                android:textColor="@color/black"
+                android:textSize="15dp" />
+
+            <TextView
+                android:id="@+id/shopInfoScreen_tvSubmitDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_regular"
+                android:paddingHorizontal="20dp"
+                android:paddingVertical="12dp"
+                android:text="Ngày submit: 24-03-2024"
+                android:textColor="@color/black"
+                android:textSize="15dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_bold"
+                android:paddingHorizontal="20dp"
+                android:paddingVertical="12dp"
+                android:text="Thông tin thẻ CCCD:"
+                android:textColor="@color/black"
+                android:textSize="15dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_regular"
+                android:paddingHorizontal="20dp"
+                android:paddingVertical="8dp"
+                android:text="Mặt trước:"
+                android:textColor="@color/black"
+                android:textSize="14dp" />
+
+            <ImageView
+                android:id="@+id/shopInfoScreen_ivFrontView"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginHorizontal="20dp"
+                android:scaleType="centerCrop"
+                android:background="@drawable/radius_8"
+                android:contentDescription="Mặt trước CCCD"
+                android:clipToOutline="true" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_regular"
+                android:paddingHorizontal="20dp"
+                android:paddingVertical="8dp"
+                android:text="Mặt sau:"
+                android:textColor="@color/black"
+                android:textSize="14dp" />
+
+            <ImageView
+                android:id="@+id/shopInfoScreen_ivBehindView"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginHorizontal="20dp"
+                android:scaleType="centerCrop"
+                android:background="@drawable/radius_8"
+                android:contentDescription="Mặt sau CCCD"
+                android:clipToOutline="true" />
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="170dp" />
+        </LinearLayout>
+
+    </ScrollView>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/primaryColor"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+            <ImageButton
+                android:id="@+id/shopInfoScreen_btnPrevious"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/transparent"
+                android:padding="8dp"
+                app:srcCompat="@drawable/icon_arrow_left_white_30" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="12dp"
+                android:text="Đơn đăng ký"
+                android:textSize="18dp"
+                android:fontFamily="@font/roboto_bold"
+                android:textColor="@color/white" />
+        </LinearLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="12dp"
+            android:text="Thông tin đăng ký"
+            android:textSize="16dp"
+            android:background="@color/white"
+            android:fontFamily="@font/roboto_bold"
+            android:textColor="@color/black" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:paddingHorizontal="15dp"
+        android:elevation="10dp"
+        android:translationZ="20dp"
+        android:gravity="center_vertical">
+        <Button
+            android:id="@+id/shopInfoScreen_btnDecline"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:background="@drawable/rectangle_button"
+            android:text="Từ chối"
+            android:textColor="@color/primaryColor"
+            app:backgroundTint="@color/primaryColor"
+            android:textSize="16dp"
+            android:fontFamily="@font/roboto_medium"
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"/>
+        <Button
+            android:id="@+id/shopInfoScreen_btnAccept"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:background="@drawable/login_button"
+            android:text="Chấp nhận"
+            android:textColor="@color/white"
+            app:backgroundTint="@color/primaryColor"
+            android:textSize="16dp"
+            android:fontFamily="@font/roboto_medium"
+            />
+    </LinearLayout>
+
+</RelativeLayout>
