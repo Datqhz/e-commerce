@@ -1,13 +1,10 @@
-package com.example.my_app;
-
-import static android.content.ContentValues.TAG;
+package com.example.my_app.screens.admin;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -16,14 +13,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.my_app.R;
 import com.example.my_app.dto.UserDTO;
 import com.example.my_app.models.UserInfo;
+import com.example.my_app.service.SendEmailTask;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
-import com.google.firebase.FirebaseOptions;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -32,8 +30,6 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.text.SimpleDateFormat;
-
-import javax.mail.MessagingException;
 
 public class ShopInfoScreen extends AppCompatActivity {
     TextView tvShopName, tvCCCD, tvPhoneNumber, tvEmail, tvSubmitDate;

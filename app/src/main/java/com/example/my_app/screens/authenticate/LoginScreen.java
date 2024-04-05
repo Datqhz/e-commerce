@@ -1,4 +1,4 @@
-package com.example.my_app;
+package com.example.my_app.screens.authenticate;
 
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
@@ -14,11 +14,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.my_app.R;
+import com.example.my_app.screens.authenticate.register.user.RegisterScreen;
+import com.example.my_app.screens.admin.ShopPendingListScreen;
+import com.example.my_app.SplashScreen;
 import com.example.my_app.models.UserInfo;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.Firebase;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;

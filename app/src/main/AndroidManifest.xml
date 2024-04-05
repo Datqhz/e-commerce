@@ -13,42 +13,34 @@
         android:theme="@style/Theme.My_app"
         tools:targetApi="31">
         <activity
-            android:name=".ShopInfoScreen"
+            android:name=".screens.admin.ShopInfoScreen"
             android:exported="false" />
         <activity
-            android:name=".ShopPendingListScreen"
+            android:name=".screens.admin.ShopPendingListScreen"
             android:exported="false" />
-
-        <receiver
-            android:name=".MyBroadcastReceiver"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="com.google.android.gms.auth.api.phone.SMS_RETRIEVED" />
-            </intent-filter>
-        </receiver>
 
         <activity
             android:name=".SplashScreen"
             android:exported="false" />
         <activity
-            android:name=".VerifyScreen"
+            android:name=".screens.authenticate.register.user.VerifyScreen"
             android:exported="false"
             android:label="@string/title_activity_verify_screen"
             android:theme="@style/Theme.My_app" />
         <activity
-            android:name=".GetCCCDImg"
+            android:name=".screens.authenticate.register.merchandiser.GetCCCDImg"
             android:exported="false" />
         <activity
-            android:name=".RegisterShop"
+            android:name=".screens.authenticate.register.merchandiser.RegisterShop"
             android:exported="false" />
         <activity
-            android:name=".RegisterScreen"
+            android:name=".screens.authenticate.register.user.RegisterScreen"
             android:exported="false" />
         <activity
-            android:name=".LoginScreen"
+            android:name=".screens.authenticate.LoginScreen"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".screens.authenticate.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

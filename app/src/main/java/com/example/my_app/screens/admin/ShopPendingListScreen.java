@@ -1,4 +1,4 @@
-package com.example.my_app;
+package com.example.my_app.screens.admin;
 
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
@@ -10,8 +10,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.example.my_app.R;
+import com.example.my_app.view_adapter.ShopPendingAdapter;
 import com.example.my_app.dto.UserDTO;
-import com.example.my_app.models.UserInfo;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;

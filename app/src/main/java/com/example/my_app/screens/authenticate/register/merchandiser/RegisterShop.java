@@ -1,4 +1,4 @@
-package com.example.my_app;
+package com.example.my_app.screens.authenticate.register.merchandiser;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -9,7 +9,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.my_app.R;
 import com.example.my_app.models.UserInfo;
+import com.example.my_app.screens.authenticate.LoginScreen;
 
 import java.util.Date;
 

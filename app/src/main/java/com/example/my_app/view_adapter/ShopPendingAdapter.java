@@ -1,4 +1,4 @@
-package com.example.my_app;
+package com.example.my_app.view_adapter;
 
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -8,8 +8,9 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.my_app.R;
+import com.example.my_app.screens.admin.ShopInfoScreen;
 import com.example.my_app.dto.UserDTO;
-import com.example.my_app.models.UserInfo;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
