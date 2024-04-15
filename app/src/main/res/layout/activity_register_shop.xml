@@ -124,6 +124,7 @@
                     android:layout_height="wrap_content"
                     android:drawableLeft="@drawable/outline_lock_primary_24"
                     android:layout_marginHorizontal="20dp"
+                    android:inputType="textPassword"
                     android:hint="Mật khẩu"
                     android:drawablePadding="12dp"
                     android:fontFamily="@font/roboto_regular"

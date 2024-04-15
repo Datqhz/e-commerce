@@ -15,11 +15,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.my_app.R;
+import com.example.my_app.dto.UserDTO;
 import com.example.my_app.screens.authenticate.register.user.RegisterScreen;
 import com.example.my_app.screens.admin.ShopPendingListScreen;
 import com.example.my_app.SplashScreen;
 import com.example.my_app.models.UserInfo;
+import com.example.my_app.shared.GlobalVariable;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -30,7 +33,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 public class LoginScreen extends AppCompatActivity {
 
 
-    TextView tvNavToSU;
+    TextView tvNavToSU, tvForgotPassword;
     EditText edtLoginUsername, edtLoginPassword;
     Button btnLogin;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -43,6 +46,7 @@ public class LoginScreen extends AppCompatActivity {
     }
     private void setControl(){
         tvNavToSU = (TextView) findViewById(R.id.tvNavToSU);
+        tvForgotPassword = (TextView) findViewById(R.id.LoginScreen_tvForgotPassword);
         edtLoginUsername = (EditText) findViewById(R.id.edtLoginUsername);
         edtLoginPassword = (EditText) findViewById(R.id.edtLoginPassword);
         btnLogin = (Button) findViewById(R.id.btnLogin);
@@ -54,6 +58,13 @@ public class LoginScreen extends AppCompatActivity {
                 Intent intent = new Intent(LoginScreen.this, RegisterScreen.class);
                 startActivity(intent);
                 finish();
+            }
+        });
+        tvForgotPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(LoginScreen.this, ForgotPasswordScreen.class);
+                startActivity(intent);
             }
         });
         btnLogin.setOnClickListener(new View.OnClickListener() {
@@ -69,6 +80,12 @@ public class LoginScreen extends AppCompatActivity {
                     edtLoginPassword.setError("Vui lòng nhập mật khẩu!");
                     edtLoginPassword.setFocusable(true);
                     canNext = false;
+                }else {
+                    if(edtLoginPassword.getText().toString().trim().length() <6){
+                        edtLoginPassword.setError("Vui lòng nhập mật khẩu có độ dài từ 6 chữ số!");
+                        edtLoginPassword.setFocusable(true);
+                        canNext = false;
+                    }
                 }
                 if(canNext){
                     FirebaseAuth auth = FirebaseAuth.getInstance();
@@ -79,12 +96,50 @@ public class LoginScreen extends AppCompatActivity {
                                 .trim()).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                             @Override
                             public void onSuccess(AuthResult authResult) {
-                                System.out.println("login by phone number success");
-                                Intent intent = new Intent(LoginScreen.this, SplashScreen.class);
-                                startActivity(intent);
-                                finish();
+                                db.collection("users").document(authResult.getUser()
+                                                .getUid()).get()
+                                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                if (task.isSuccessful()) {
+                                                    DocumentSnapshot document = task.getResult();
+                                                    if (document.exists()) {
+                                                        UserInfo userInfo = document.toObject(UserInfo.class);
+                                                        UserDTO dto = new UserDTO();
+                                                        dto.mapToDTO(userInfo);
+                                                        dto.setId(document.getId());
+                                                        GlobalVariable globalVariable = new GlobalVariable(dto);
+                                                        Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                                                        //////Nav to suitable screen with roleId
+                                                        if(userInfo.getRoleId().equals("SJBifnfNKREVcjRmZw9X")){ //admin
+                                                            Intent intent = new Intent(LoginScreen.this, ShopPendingListScreen.class);
+                                                            startActivity(intent);
+                                                        }else if(userInfo.getRoleId().equals("49dczCwVNYLoChrME3nD")){ // shopper
+                                                            Intent intent = new Intent(LoginScreen.this, SplashScreen.class);
+                                                            startActivity(intent);
+                                                        }else {// Merchandiser
+                                                            Intent intent = new Intent(LoginScreen.this, SplashScreen.class);
+                                                            startActivity(intent);
+                                                        }
+                                                        finish();
+                                                    } else {
+                                                        Log.d(TAG, "No such document");
+                                                    }
+
+                                                } else {
+                                                    Log.d(TAG, "get failed with ", task.getException());
+                                                }
+                                            }
+                                        });
                             }
-                        });
+                        })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Toast.makeText(LoginScreen.this,"Số điện thoại hoặc mật khẩu sai!", Toast.LENGTH_LONG).show();
+
+                                    }
+                                });
                     }else if(isValidEmail(edtLoginUsername.getText().toString().trim())){
                         auth.signInWithEmailAndPassword(edtLoginUsername.getText()
                                 .toString().trim(),edtLoginPassword.getText().toString()
@@ -102,6 +157,10 @@ public class LoginScreen extends AppCompatActivity {
                                                         DocumentSnapshot document = task.getResult();
                                                         if (document.exists()) {
                                                             UserInfo userInfo = document.toObject(UserInfo.class);
+                                                            UserDTO dto = new UserDTO();
+                                                            dto.mapToDTO(userInfo);
+                                                            dto.setId(document.getId());
+                                                            GlobalVariable globalVariable = new GlobalVariable(dto);
                                                             Log.d(TAG, "DocumentSnapshot data: " + document.getData());
                                                             //////Nav to suitable screen with roleId
                                                             if(userInfo.getRoleId().equals("SJBifnfNKREVcjRmZw9X")){ //admin
@@ -131,7 +190,14 @@ public class LoginScreen extends AppCompatActivity {
                                 }
 
                             }
-                        });
+                        })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Toast.makeText(LoginScreen.this,"Email hoặc mật khẩu sai!", Toast.LENGTH_LONG).show();
+
+                                    }
+                                });
                     }else {
                         Toast.makeText(LoginScreen.this, "Username bạn nhập vào không hợp lệ!", Toast.LENGTH_LONG).show();;
                     }

@@ -70,6 +70,12 @@ public class RegisterShop extends AppCompatActivity {
                     edtPassword.setError("Vui lòng nhập mật khẩu!");
                     edtPassword.setFocusable(true);
                     canNext = false;
+                }else {
+                    if(edtPassword.getText().toString().trim().length() <6){
+                        edtPassword.setError("Vui lòng nhập mật khẩu có độ dài từ 6 chữ số!");
+                        edtPassword.setFocusable(true);
+                        canNext = false;
+                    }
                 }
                 if(edtCCCD.getText().toString().trim().equals("")){
                     edtCCCD.setError("Vui lòng nhập số CCCD!");

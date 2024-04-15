@@ -80,12 +80,12 @@
             app:backgroundTint="@color/primaryColor" />
 
         <TextView
-            android:gravity="center"
+            android:id="@+id/Main_tvForgotPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Quên mật khẩu?"
             android:fontFamily="@font/roboto_regular"
-            />
+            android:gravity="center"
+            android:text="Quên mật khẩu?" />
     </LinearLayout>
 
 </RelativeLayout>

@@ -134,7 +134,7 @@
         android:layout_marginLeft="20dp"
         android:background="@drawable/rectangle_button"
         app:backgroundTint="@color/primaryColor"
-        android:text="Đăng ký với SDT"
+        android:text="Đăng ký với Email"
         android:fontFamily="@font/roboto_bold"
         android:textColor="@color/primaryColor"
         android:backgroundTint="@color/primaryColor"

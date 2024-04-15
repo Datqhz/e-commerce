@@ -114,4 +114,18 @@ public class UserDTO implements Serializable {
         this.roleId = user.getRoleId();
     }
 
+    @Override
+    public String toString() {
+        return "UserDTO{" +
+                "id='" + id + '\'' +
+                ", displayName='" + displayName + '\'' +
+                ", cccd='" + cccd + '\'' +
+                ", phone='" + phone + '\'' +
+                ", email='" + email + '\'' +
+                ", createDate=" + createDate +
+                ", password='" + password + '\'' +
+                ", CCCDImg=" + CCCDImg +
+                ", roleId='" + roleId + '\'' +
+                '}';
+    }
 }

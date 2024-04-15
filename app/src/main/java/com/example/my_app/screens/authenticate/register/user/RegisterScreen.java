@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.my_app.R;
+import com.example.my_app.models.Cart;
 import com.example.my_app.models.UserInfo;
 import com.example.my_app.screens.authenticate.LoginScreen;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -92,11 +93,16 @@ public class RegisterScreen extends AppCompatActivity {
                     edtUsername.setFocusable(true);
                     canNext = false;
                 }
-
                 if(edtPassword.getText().toString().trim().equals("")){
                     edtPassword.setError("Vui lòng nhập mật khẩu!");
                     edtPassword.setFocusable(true);
                     canNext = false;
+                }else {
+                    if(edtPassword.getText().toString().trim().length() <6){
+                        edtPassword.setError("Vui lòng nhập mật khẩu có độ dài từ 6 chữ số!");
+                        edtPassword.setFocusable(true);
+                        canNext = false;
+                    }
                 }
                 if(canNext){
                     userInfo.setDisplayName(edtDisplayName.getText().toString().trim());
@@ -148,7 +154,7 @@ public class RegisterScreen extends AppCompatActivity {
                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void unused) {
-//                                            finish();
+                                            db.collection("carts").add(new Cart(user.getUid()));
                                             Toast.makeText(getApplicationContext(), "Tạo tài khoản thành công!", Toast.LENGTH_LONG).show();
                                         }
                                     })

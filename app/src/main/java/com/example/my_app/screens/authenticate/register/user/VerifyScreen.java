@@ -37,7 +37,7 @@ import java.util.concurrent.TimeUnit;
 
 public class VerifyScreen extends AppCompatActivity {
     UserInfo userInfo;
-    Button btnVerify, btnResendOTP;
+    Button btnVerify;
     EditText edtOTP;
     TextView tvVerifyContent;
 
@@ -57,7 +57,6 @@ public class VerifyScreen extends AppCompatActivity {
     private void setControl(){
         tvVerifyContent = findViewById(R.id.tvVerifyContent);
         btnVerify = findViewById(R.id.btnVerify);
-        btnResendOTP = findViewById(R.id.btnResendOTP);
         edtOTP = findViewById(R.id.edtOTP);
 
     }
@@ -67,12 +66,6 @@ public class VerifyScreen extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 verifyCode();
-            }
-        });
-        btnResendOTP.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
             }
         });
     }
@@ -88,6 +81,7 @@ public class VerifyScreen extends AppCompatActivity {
                     @Override
                     public void onVerificationCompleted(@NonNull PhoneAuthCredential phoneAuthCredential) {
                         otp = phoneAuthCredential.getSmsCode();
+                        System.out.println("otp: "  + otp);
                     }
 
                     @Override
@@ -103,6 +97,7 @@ public class VerifyScreen extends AppCompatActivity {
         PhoneAuthProvider.verifyPhoneNumber(options);
     }
     private void verifyCode() {
+        System.out.println("otp user type: " + edtOTP.getText().toString().trim());
         if(otp.equals(edtOTP.getText().toString().trim())){
             System.out.println("start create");
             Executors.newSingleThreadExecutor().submit(this::createUserWithEmailAndPassword);
