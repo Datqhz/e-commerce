@@ -40,6 +40,7 @@ public class VerifyScreen extends AppCompatActivity {
     Button btnVerify;
     EditText edtOTP;
     TextView tvVerifyContent;
+    String password;
 
     String otp;
     @Override
@@ -48,6 +49,7 @@ public class VerifyScreen extends AppCompatActivity {
         setContentView(R.layout.activity_verify_screen);
         Intent intent = getIntent();
         userInfo = (UserInfo) intent.getSerializableExtra("user_info");
+        password = (String) intent.getSerializableExtra("password");
         setControl();
         setEvent();
         verifyPhoneNumber();
@@ -112,7 +114,7 @@ public class VerifyScreen extends AppCompatActivity {
     }
     private void createUserWithEmailAndPassword() {
         FirebaseAuth auth = FirebaseAuth.getInstance();
-        auth.createUserWithEmailAndPassword(userInfo.getPhone()+"@gmail.com", userInfo.getPassword())
+        auth.createUserWithEmailAndPassword(userInfo.getPhone()+"@gmail.com",password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {

@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.my_app.R;
+import com.example.my_app.models.ShopPending;
 import com.example.my_app.models.UserInfo;
 import com.example.my_app.screens.authenticate.LoginScreen;
 
@@ -20,7 +21,7 @@ public class RegisterShop extends AppCompatActivity {
     TextView tvNavToSI;
     Button btnNext;
     EditText edtPhone, edtEmail, edtPassword, edtShopName, edtCCCD;
-    UserInfo userInfo = new UserInfo();
+    ShopPending shop= new ShopPending();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,15 +85,15 @@ public class RegisterShop extends AppCompatActivity {
                 }
 
                 if(canNext){
-                    userInfo.setDisplayName(edtShopName.getText().toString().trim());
-                    userInfo.setPassword(edtPassword.getText().toString().trim());
-                    userInfo.setCccd(edtCCCD.getText().toString().trim());
-                    userInfo.setPhone(edtPhone.getText().toString().trim());
-                    userInfo.setEmail(edtEmail.getText().toString().trim());
-                    userInfo.setRoleId("s63GofApLdH8B7MZazgQ");
-                    userInfo.setCreateDate(new Date());
+                    shop.setDisplayName(edtShopName.getText().toString().trim());
+                    shop.setPassword(edtPassword.getText().toString().trim());
+                    shop.setCccd(edtCCCD.getText().toString().trim());
+                    shop.setPhone(edtPhone.getText().toString().trim());
+                    shop.setEmail(edtEmail.getText().toString().trim());
+                    shop.setRoleId("s63GofApLdH8B7MZazgQ");
+                    shop.setCreateDate(new Date());
                     Intent intent = new Intent(RegisterShop.this, GetCCCDImg.class);
-                    intent.putExtra("user_info", userInfo);
+                    intent.putExtra("shop", shop);
                     startActivity(intent);
                 }
             }

@@ -15,7 +15,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.my_app.R;
-import com.example.my_app.dto.UserDTO;
 import com.example.my_app.screens.authenticate.register.user.RegisterScreen;
 import com.example.my_app.screens.admin.ShopPendingListScreen;
 import com.example.my_app.SplashScreen;
@@ -105,10 +104,8 @@ public class LoginScreen extends AppCompatActivity {
                                                     DocumentSnapshot document = task.getResult();
                                                     if (document.exists()) {
                                                         UserInfo userInfo = document.toObject(UserInfo.class);
-                                                        UserDTO dto = new UserDTO();
-                                                        dto.mapToDTO(userInfo);
-                                                        dto.setId(document.getId());
-                                                        GlobalVariable globalVariable = new GlobalVariable(dto);
+                                                        UserInfo user = new UserInfo();
+                                                        GlobalVariable globalVariable = new GlobalVariable(user);
                                                         Log.d(TAG, "DocumentSnapshot data: " + document.getData());
                                                         //////Nav to suitable screen with roleId
                                                         if(userInfo.getRoleId().equals("SJBifnfNKREVcjRmZw9X")){ //admin
@@ -157,10 +154,7 @@ public class LoginScreen extends AppCompatActivity {
                                                         DocumentSnapshot document = task.getResult();
                                                         if (document.exists()) {
                                                             UserInfo userInfo = document.toObject(UserInfo.class);
-                                                            UserDTO dto = new UserDTO();
-                                                            dto.mapToDTO(userInfo);
-                                                            dto.setId(document.getId());
-                                                            GlobalVariable globalVariable = new GlobalVariable(dto);
+                                                            GlobalVariable globalVariable = new GlobalVariable(userInfo);
                                                             Log.d(TAG, "DocumentSnapshot data: " + document.getData());
                                                             //////Nav to suitable screen with roleId
                                                             if(userInfo.getRoleId().equals("SJBifnfNKREVcjRmZw9X")){ //admin

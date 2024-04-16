@@ -26,6 +26,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Date;
@@ -106,17 +107,18 @@ public class RegisterScreen extends AppCompatActivity {
                 }
                 if(canNext){
                     userInfo.setDisplayName(edtDisplayName.getText().toString().trim());
-                    userInfo.setPassword(edtPassword.getText().toString().trim());
                     userInfo.setCreateDate(new Date());
                     userInfo.setRoleId("49dczCwVNYLoChrME3nD");
+                    userInfo.setStatus(true);
                     if(isPhone){
                         userInfo.setPhone(edtUsername.getText().toString().trim());
                         Intent intent = new Intent(RegisterScreen.this, VerifyScreen.class);
                         intent.putExtra("user_info", userInfo);
+                        intent.putExtra("password", edtPassword.getText().toString().trim());
                         startActivity(intent);
                     }else{
                         userInfo.setEmail(edtUsername.getText().toString().trim());
-                        createUserWithEmailAndPassword(userInfo);
+                        createUserWithEmailAndPassword(userInfo, edtPassword.getText().toString().trim());
                     }
                 }
             }
@@ -129,7 +131,8 @@ public class RegisterScreen extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                                Toast.makeText(RegisterScreen.this,"Thư xác nhận đã được gửi đến email của bạn, vui lòng xác nhận để hoàn tất quá trình đăng ký!", Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplicationContext(),"Thư xác nhận đã được gửi đến email của bạn, vui lòng xác nhận để hoàn tất quá trình đăng ký!", Toast.LENGTH_LONG).show();
+                                finish();
                         } else {
                             // Handle the error
                             Log.e(TAG, "Error sending email verification", task.getException());
@@ -139,9 +142,9 @@ public class RegisterScreen extends AppCompatActivity {
     }
 
 
-    private void createUserWithEmailAndPassword(UserInfo user) {
+    private void createUserWithEmailAndPassword(UserInfo user, String password) {
         FirebaseAuth auth = FirebaseAuth.getInstance();
-        auth.createUserWithEmailAndPassword(user.getEmail(), user.getPassword())
+        auth.createUserWithEmailAndPassword(user.getEmail(), password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
@@ -149,13 +152,15 @@ public class RegisterScreen extends AppCompatActivity {
                             // User created successfully
                             FirebaseUser user = auth.getCurrentUser();
                             FirebaseFirestore db = FirebaseFirestore.getInstance();
+                            userInfo.setUid(user.getUid());
                             db.collection("users").document(user.getUid())
                                     .set(userInfo)
                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void unused) {
-                                            db.collection("carts").add(new Cart(user.getUid()));
-                                            Toast.makeText(getApplicationContext(), "Tạo tài khoản thành công!", Toast.LENGTH_LONG).show();
+                                            DocumentReference ref = db.collection("carts").document();
+                                            ref.set(new Cart(user.getUid(), ref.getId()));
+                                            verifyEmail(userInfo, auth);
                                         }
                                     })
                                     .addOnFailureListener(new OnFailureListener() {
@@ -165,7 +170,6 @@ public class RegisterScreen extends AppCompatActivity {
                                             user.delete();
                                         }
                                     });
-                            verifyEmail(userInfo, auth);
                         } else {
                             // Handle errors during user creation
                             Toast.makeText(getApplicationContext(),"Xảy ra lỗi trong quá trình tào tài khoản", Toast.LENGTH_LONG);

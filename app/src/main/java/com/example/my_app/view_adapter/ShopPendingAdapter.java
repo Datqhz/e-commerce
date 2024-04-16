@@ -9,16 +9,16 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.my_app.R;
+import com.example.my_app.models.ShopPending;
 import com.example.my_app.screens.admin.ShopInfoScreen;
-import com.example.my_app.dto.UserDTO;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class ShopPendingAdapter extends RecyclerView.Adapter<ShopPendingViewHolder> {
 
-    List<UserDTO> shopList;
-    public ShopPendingAdapter(List<UserDTO> shopList) {
+    List<ShopPending> shopList;
+    public ShopPendingAdapter(List<ShopPending> shopList) {
         this.shopList = shopList;
     }
 
@@ -31,14 +31,14 @@ public class ShopPendingAdapter extends RecyclerView.Adapter<ShopPendingViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ShopPendingViewHolder holder, int position) {
-        UserDTO shop = shopList.get(position);
+        ShopPending shop = shopList.get(position);
         holder.tvShopName.setText(shop.getDisplayName());
         holder.tvSendDate.setText(new SimpleDateFormat("dd/MM/yyyy").format(shop.getCreateDate()));
         holder.btnInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(view.getContext(), ShopInfoScreen.class);
-                intent.putExtra("userDTO", shop);
+                intent.putExtra("shop", shop);
                 view.getContext().startActivity(intent);
             }
         });

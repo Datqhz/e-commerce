@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.my_app.R;
+import com.example.my_app.models.ShopPending;
 import com.example.my_app.models.UserInfo;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
@@ -34,7 +35,7 @@ public class GetCCCDImg extends AppCompatActivity {
 
     private static final int CAMERA_REQUEST = 1888;
 
-    UserInfo userInfo;
+    ShopPending shop;
     Bitmap frontImg, behindImg;
     List<String> imgLink = new ArrayList<>();
     TextView tvPrevious, tvFront, tvBehind;
@@ -48,7 +49,7 @@ public class GetCCCDImg extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_get_cccdimg);
         Intent intent = getIntent();
-        userInfo = (UserInfo) intent.getSerializableExtra("user_info");
+        shop = (ShopPending) intent.getSerializableExtra("shop");
         setControl();
         setEvent();
     }
@@ -145,21 +146,19 @@ public class GetCCCDImg extends AppCompatActivity {
             imgLink.add("cccd/"+uniqueString+i+".jpg");
             UploadTask uploadTask = cccdRef.putBytes(imageData);
             int finalI = i;
-            uploadTask.addOnSuccessListener(taskSnapshot -> {
-                if(finalI == imgs.size()-1){
-                    System.out.println(imgLink);
-                    userInfo.setCCCDImg(imgLink);
-                    FirebaseFirestore.getInstance().collection("shopPendings").add(userInfo).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                        @Override
-                        public void onSuccess(DocumentReference documentReference) {
-                            Toast.makeText(GetCCCDImg.this, "Đơn đăng ký bán hàng đã được gửi cho admin, một email xác thực tài khoản sẽ được gửi đến bạn khi admin xác nhận đơn đăng ký.\nVui lòng xác thực email để hoàn tất đăng ký.", Toast.LENGTH_LONG).show();
-                            finish();
-                        }
-                    });
-
+            uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    if (finalI == imgs.size() - 1) {
+                        System.out.println(imgLink);
+                        shop.setCCCDImg(imgLink);
+                        DocumentReference ref = FirebaseFirestore.getInstance().collection("shopPendings").document();
+                        shop.setShopId(ref.getId());
+                        ref.set(shop);
+                        Toast.makeText(GetCCCDImg.this, "Gửi đơn đăng ký thành công", Toast.LENGTH_LONG).show();
+                        finish();
+                    }
                 }
-            }).addOnFailureListener(exception -> {
-                Toast.makeText(GetCCCDImg.this, "Xảy ra sự cố trong quá trình lưu trữ hình ảnh", Toast.LENGTH_LONG).show();
             });
         }
 

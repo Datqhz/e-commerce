@@ -11,8 +11,8 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.example.my_app.R;
+import com.example.my_app.models.ShopPending;
 import com.example.my_app.view_adapter.ShopPendingAdapter;
-import com.example.my_app.dto.UserDTO;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -25,7 +25,7 @@ import java.util.List;
 public class ShopPendingListScreen extends AppCompatActivity {
 
     RecyclerView rvPendingList;
-    List<UserDTO> shopPendingList;
+    List<ShopPending> shopPendingList;
     ShopPendingAdapter shopPendingAdapter;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     @Override
@@ -55,9 +55,8 @@ public class ShopPendingListScreen extends AppCompatActivity {
                         shopPendingList.clear();
                         for (QueryDocumentSnapshot doc : value) {
                             Log.d(TAG, "DocumentSnapshot data: " + doc.getData());
-                            UserDTO dto = doc.toObject(UserDTO.class);
-                            dto.setId(doc.getId());
-                            shopPendingList.add(dto);
+                            ShopPending shop = doc.toObject(ShopPending.class);
+                            shopPendingList.add(shop);
                         }
                         shopPendingAdapter.notifyDataSetChanged();
                     }

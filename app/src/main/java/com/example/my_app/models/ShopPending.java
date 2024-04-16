@@ -1,51 +1,41 @@
-package com.example.my_app.dto;
-
-import com.example.my_app.models.UserInfo;
+package com.example.my_app.models;
 
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-public class UserDTO implements Serializable {
-    private String id;
+public class ShopPending implements Serializable {
+    private String shopId;
     private String displayName;
     private String cccd;
     private String phone;
     private String email;
     private Date createDate;
-    private String password;
     private List<String> CCCDImg;
+    private String password;
     private String roleId;
 
-
-    public UserDTO(String id, String displayName, String cccd, String phone, String email, Date createDate, String password, List<String> CCCDImg, String roleId) {
-        this.id = id;
+    public ShopPending(String shopId, String displayName, String cccd, String phone, String email, Date createDate, List<String> CCCDImg, String password, String roleId) {
+        this.shopId = shopId;
         this.displayName = displayName;
         this.cccd = cccd;
         this.phone = phone;
         this.email = email;
         this.createDate = createDate;
-        this.password = password;
         this.CCCDImg = CCCDImg;
+        this.password = password;
         this.roleId = roleId;
     }
-    public UserDTO() {
+
+    public ShopPending() {
     }
 
-    public String getId() {
-        return id;
+    public String getShopId() {
+        return shopId;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getRoleId() {
-        return roleId;
-    }
-
-    public void setRoleId(String roleId) {
-        this.roleId = roleId;
+    public void setShopId(String shopId) {
+        this.shopId = shopId;
     }
 
     public String getDisplayName() {
@@ -88,6 +78,14 @@ public class UserDTO implements Serializable {
         this.createDate = createDate;
     }
 
+    public List<String> getCCCDImg() {
+        return CCCDImg;
+    }
+
+    public void setCCCDImg(List<String> CCCDImg) {
+        this.CCCDImg = CCCDImg;
+    }
+
     public String getPassword() {
         return password;
     }
@@ -96,35 +94,25 @@ public class UserDTO implements Serializable {
         this.password = password;
     }
 
-    public List<String> getCCCDImg() {
-        return CCCDImg;
+    public String getRoleId() {
+        return roleId;
     }
 
-    public void setCCCDImg(List<String> CCCDImg) {
-        this.CCCDImg = CCCDImg;
-    }
-    public void mapToDTO(UserInfo user){
-        this.displayName = user.getDisplayName();
-        this.cccd = user.getCccd();
-        this.phone = user.getPhone();
-        this.email = user.getEmail();
-        this.createDate = user.getCreateDate();
-        this.password = user.getPassword();
-        this.CCCDImg = user.getCCCDImg();
-        this.roleId = user.getRoleId();
+    public void setRoleId(String roleId) {
+        this.roleId = roleId;
     }
 
     @Override
     public String toString() {
-        return "UserDTO{" +
-                "id='" + id + '\'' +
+        return "ShopPending{" +
+                "shopId='" + shopId + '\'' +
                 ", displayName='" + displayName + '\'' +
                 ", cccd='" + cccd + '\'' +
                 ", phone='" + phone + '\'' +
                 ", email='" + email + '\'' +
                 ", createDate=" + createDate +
-                ", password='" + password + '\'' +
                 ", CCCDImg=" + CCCDImg +
+                ", password='" + password + '\'' +
                 ", roleId='" + roleId + '\'' +
                 '}';
     }
