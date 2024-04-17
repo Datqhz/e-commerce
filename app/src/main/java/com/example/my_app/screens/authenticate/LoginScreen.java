@@ -19,6 +19,7 @@ import com.example.my_app.screens.authenticate.register.user.RegisterScreen;
 import com.example.my_app.screens.admin.ShopPendingListScreen;
 import com.example.my_app.SplashScreen;
 import com.example.my_app.models.UserInfo;
+import com.example.my_app.screens.merchandiser.ProductManagement;
 import com.example.my_app.shared.GlobalVariable;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -115,7 +116,7 @@ public class LoginScreen extends AppCompatActivity {
                                                             Intent intent = new Intent(LoginScreen.this, SplashScreen.class);
                                                             startActivity(intent);
                                                         }else {// Merchandiser
-                                                            Intent intent = new Intent(LoginScreen.this, SplashScreen.class);
+                                                            Intent intent = new Intent(LoginScreen.this, ProductManagement.class);
                                                             startActivity(intent);
                                                         }
                                                         finish();

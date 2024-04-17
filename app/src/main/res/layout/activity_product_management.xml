@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/white"
-    tools:context=".screens.admin.ShopPendingListScreen">
+    tools:context=".screens.merchandiser.ProductManagement">
 
     <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
@@ -15,15 +13,13 @@
         android:minHeight="?attr/actionBarSize"
         app:titleTextColor="@android:color/white"
         android:background="@color/orange"
-        app:title="Đơn đăng ký bán hàng"
+        app:title="Quản lý sản phẩm"
         />
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvDSSP"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:overScrollMode="never"
-        android:id="@+id/shopPendingList_rvPendingList"
-        android:nestedScrollingEnabled="true"
-        android:layout_marginVertical="12dp"
-        />
-
-</LinearLayout>
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="56dp" />
+</RelativeLayout>
