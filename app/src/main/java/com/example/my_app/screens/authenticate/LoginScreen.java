@@ -110,12 +110,15 @@ public class LoginScreen extends AppCompatActivity {
                                                         Log.d(TAG, "DocumentSnapshot data: " + document.getData());
                                                         //////Nav to suitable screen with roleId
                                                         if(userInfo.getRoleId().equals("SJBifnfNKREVcjRmZw9X")){ //admin
+                                                            System.out.println("admin");
                                                             Intent intent = new Intent(LoginScreen.this, ShopPendingListScreen.class);
                                                             startActivity(intent);
                                                         }else if(userInfo.getRoleId().equals("49dczCwVNYLoChrME3nD")){ // shopper
+                                                            System.out.println("buyer");
                                                             Intent intent = new Intent(LoginScreen.this, SplashScreen.class);
                                                             startActivity(intent);
                                                         }else {// Merchandiser
+                                                            System.out.println("mer");
                                                             Intent intent = new Intent(LoginScreen.this, ProductManagement.class);
                                                             startActivity(intent);
                                                         }
@@ -165,7 +168,7 @@ public class LoginScreen extends AppCompatActivity {
                                                                 Intent intent = new Intent(LoginScreen.this, SplashScreen.class);
                                                                 startActivity(intent);
                                                             }else {// Merchandiser
-                                                                Intent intent = new Intent(LoginScreen.this, SplashScreen.class);
+                                                                Intent intent = new Intent(LoginScreen.this, ProductManagement.class);
                                                                 startActivity(intent);
                                                             }
                                                             finish();

@@ -96,7 +96,7 @@ public class CategoryManagement extends AppCompatActivity {
         categoryAdapter = new CategoryAdapter(CategoryManagement.this, categoryArrayList, new CategoryAdapter.GetData() {
             @Override
             public void onItemClick(Category category) {
-                edtCategory.setText(category.getCategoryName().toString());
+                edtCategory.setText(category.getCategory().toString());
                 imageUrlOld = category.getImageUrl();
                 categoryId = category.getCategoryId();
                 imageUriOld = Uri.parse(imageUrlOld);
@@ -125,7 +125,7 @@ public class CategoryManagement extends AppCompatActivity {
                         for (QueryDocumentSnapshot dc : value) {
                             Category category = dc.toObject(Category.class);
                             categoryArrayList.add(category);
-                            categoryNameList.add(dc.get("categoryName").toString());
+                            categoryNameList.add(category.getCategory());
                         }
                         categoryAdapter.notifyDataSetChanged();
                     }

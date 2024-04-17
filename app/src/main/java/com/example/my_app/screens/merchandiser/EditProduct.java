@@ -185,7 +185,7 @@ public class EditProduct extends AppCompatActivity {
             String tempp = bundle.getString("quantity");
 
             edtQuantity.setText(tempp);
-            String temp = bundle.getString("categoryName");
+            String temp = bundle.getString("category");
 //                for(int i = 0; i < categoryArrayList.size();i++){
 //                    if(categoryArrayList.get(i).equals(temp)){
 //                        System.out.println("thành công" + temp);
@@ -353,7 +353,7 @@ public class EditProduct extends AppCompatActivity {
         edited.put("desc", edtDesc.getText().toString().trim());
         edited.put("price", edtPrice.getText().toString().trim());
         edited.put("quantity", Integer.parseInt(edtQuantity.getText().toString().trim()));
-        edited.put("categoryName", spCategory.getSelectedItem().toString());
+        edited.put("category", spCategory.getSelectedItem().toString());
         edited.put("listImageUrl", listImageUrl);
         edited.put("productId", productId);
         edited.put("uid", uid);

@@ -64,12 +64,9 @@ public class ProductManagement extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        setEvent();;
         setControl();
         getProductInfo();
 
-    }
-    private void setEvent(){
     }
 
     private void setControl(){

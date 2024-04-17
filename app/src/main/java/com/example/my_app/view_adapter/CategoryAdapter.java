@@ -52,7 +52,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
     @Override
     public void onBindViewHolder(@NonNull CategoryAdapter.CategoryViewHolder holder, int position) {
         Category category = categoryArrayList.get(position);
-        holder.tvCategory.setText(category.getCategoryName());
+        holder.tvCategory.setText(category.getCategory());
         Picasso.get().load(category.getImageUrl()).into(holder.imageCategory);
 
 
@@ -67,7 +67,6 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
                         .setPositiveButton("Có", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                System.out.println("11");
                                 int index=holder.getAbsoluteAdapterPosition();
                                 storageReference = storage.getReferenceFromUrl(categoryArrayList.get(index).getImageUrl());
                                 firestore.collection("categories").document(categoryArrayList.get(holder.getAbsoluteAdapterPosition())

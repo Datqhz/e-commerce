@@ -1,25 +1,25 @@
 package com.example.my_app.models;
 
 public class Category {
-    private String categoryName;
+    private String category;
     private String imageUrl;
     private String categoryId;
 
     public Category(){
     }
 
-    public Category(String categoryName, String imageUrl, String categoryId) {
-        this.categoryName = categoryName;
+    public Category(String category, String imageUrl, String categoryId) {
+        this.category = category;
         this.imageUrl = imageUrl;
         this.categoryId = categoryId;
     }
 
-    public String getCategoryName() {
-        return categoryName;
+    public String getCategory() {
+        return category;
     }
 
-    public void setCategoryName(String categoryName) {
-        this.categoryName = categoryName;
+    public void setCategory(String category) {
+        this.category = category;
     }
 
     public String getImageUrl() {

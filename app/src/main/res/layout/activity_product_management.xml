@@ -7,19 +7,18 @@
     tools:context=".screens.merchandiser.ProductManagement">
 
     <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/toolbar"
-        android:minHeight="?attr/actionBarSize"
-        app:titleTextColor="@android:color/white"
         android:background="@color/orange"
+        android:minHeight="?attr/actionBarSize"
         app:title="Quản lý sản phẩm"
-        />
+        app:titleTextColor="@android:color/white" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvDSSP"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="56dp" />
+        android:layout_below="@+id/toolbar"
+        android:layout_centerHorizontal="true" />
 </RelativeLayout>
