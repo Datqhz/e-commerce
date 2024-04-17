@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,13 +15,16 @@ import com.example.my_app.models.ShopPending;
 import com.example.my_app.screens.admin.ShopInfoScreen;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
-public class ShopPendingAdapter extends RecyclerView.Adapter<ShopPendingViewHolder> {
+public class ShopPendingAdapter extends RecyclerView.Adapter<ShopPendingViewHolder> implements Filterable {
 
     List<ShopPending> shopList;
+    List<ShopPending> shopListOld;
     public ShopPendingAdapter(List<ShopPending> shopList) {
         this.shopList = shopList;
+        this.shopListOld = shopList;
     }
 
     @NonNull
@@ -47,5 +52,36 @@ public class ShopPendingAdapter extends RecyclerView.Adapter<ShopPendingViewHold
     @Override
     public int getItemCount() {
         return shopList.size();
+    }
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                String strSearch = constraint.toString();
+                if (strSearch.isEmpty()){
+                    shopList = shopListOld;
+                }else {
+                    ArrayList<ShopPending> list = new ArrayList<>();
+                    for (ShopPending shopPending : shopListOld){
+                        if (shopPending.getDisplayName().toLowerCase().contains(strSearch.toLowerCase())){
+                            list.add(shopPending);
+                        }
+                    }
+                    shopList = list;
+                }
+
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = shopList;
+
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                shopList = (List<ShopPending>) results.values;
+                notifyDataSetChanged();
+            }
+        };
     }
 }

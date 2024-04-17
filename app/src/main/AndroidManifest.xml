@@ -15,6 +15,22 @@
         android:theme="@style/Theme.My_app"
         tools:targetApi="31">
         <activity
+            android:name=".screens.merchandiser.EditProduct"
+            android:exported="false"
+            android:parentActivityName=".screens.merchandiser.ProductManagement"/>
+        <activity
+            android:name=".screens.merchandiser.AddProduct"
+            android:exported="false"
+            android:parentActivityName=".screens.merchandiser.ProductManagement"/>
+        <activity
+            android:name=".screens.merchandiser.ProductManagement"
+            android:exported="false" />
+        <activity
+            android:name=".screens.admin.CategoryManagement"
+            android:exported="false"
+            android:parentActivityName=".screens.admin.ShopPendingListScreen">
+        </activity>
+        <activity
             android:name=".screens.authenticate.ForgotPasswordScreen"
             android:exported="false" />
         <activity
@@ -48,6 +64,7 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
