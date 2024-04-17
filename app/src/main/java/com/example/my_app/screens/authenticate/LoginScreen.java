@@ -20,6 +20,7 @@ import com.example.my_app.screens.admin.ShopPendingListScreen;
 import com.example.my_app.SplashScreen;
 import com.example.my_app.models.UserInfo;
 import com.example.my_app.screens.merchandiser.ProductManagement;
+import com.example.my_app.screens.user.HomeScreen;
 import com.example.my_app.shared.GlobalVariable;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -115,7 +116,7 @@ public class LoginScreen extends AppCompatActivity {
                                                             startActivity(intent);
                                                         }else if(userInfo.getRoleId().equals("49dczCwVNYLoChrME3nD")){ // shopper
                                                             System.out.println("buyer");
-                                                            Intent intent = new Intent(LoginScreen.this, SplashScreen.class);
+                                                            Intent intent = new Intent(LoginScreen.this, HomeScreen.class);
                                                             startActivity(intent);
                                                         }else {// Merchandiser
                                                             System.out.println("mer");
@@ -165,7 +166,7 @@ public class LoginScreen extends AppCompatActivity {
                                                                 Intent intent = new Intent(LoginScreen.this, ShopPendingListScreen.class);
                                                                 startActivity(intent);
                                                             }else if(userInfo.getRoleId().equals("49dczCwVNYLoChrME3nD")){ // shopper
-                                                                Intent intent = new Intent(LoginScreen.this, SplashScreen.class);
+                                                                Intent intent = new Intent(LoginScreen.this, HomeScreen.class);
                                                                 startActivity(intent);
                                                             }else {// Merchandiser
                                                                 Intent intent = new Intent(LoginScreen.this, ProductManagement.class);

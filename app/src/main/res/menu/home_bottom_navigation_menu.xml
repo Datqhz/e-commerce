@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="Home"
+        android:id="@+id/homeMenuItem"
+        android:icon="@drawable/home_icon"/>
+    <item android:title="Danh mục"
+        android:id="@+id/categoryMenuItem"
+        android:icon="@drawable/category_nav"/>
+    <item android:title="Tôi"
+        android:id="@+id/personMenuItem"
+        android:icon="@drawable/person_icon"/>
+</menu>
