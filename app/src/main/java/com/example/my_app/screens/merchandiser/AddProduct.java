@@ -223,8 +223,6 @@ public class AddProduct extends AppCompatActivity {
         }
         intent.setAction(Intent.ACTION_GET_CONTENT);
         activityResultLauncher.launch(Intent.createChooser(intent, "Chọn hình ảnh"));
-
-
     }
     private void uploadImage() {
         String productName = (edtProductName.getText().toString().replaceAll("\\s+", " ")).trim().toLowerCase();
