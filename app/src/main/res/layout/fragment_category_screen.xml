@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".screens.user.CategoryScreen">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingVertical="10dp"
+            android:id="@+id/cart_screen_header">
+
+            <ImageView
+                android:id="@+id/cart_screen_back_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:src="@drawable/icon_back_arrow_32"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Giỏ hàng"
+                android:textSize="20sp"
+                android:layout_marginStart="14dp"
+                app:layout_constraintBottom_toBottomOf="@+id/cart_screen_back_btn"
+                app:layout_constraintStart_toEndOf="@+id/cart_screen_back_btn"
+                app:layout_constraintTop_toTopOf="@+id/cart_screen_back_btn"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="20dp"
+                android:text="Sửa"
+                app:layout_constraintBottom_toBottomOf="@+id/cart_screen_back_btn"
+                app:layout_constraintEnd_toStartOf="@+id/cart_screen_message_btn"
+                app:layout_constraintTop_toTopOf="@+id/cart_screen_back_btn"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/cart_screen_message_btn"
+                android:layout_marginEnd="16dp"
+                android:src="@drawable/icon_message_32"
+                app:layout_constraintBottom_toBottomOf="@+id/cart_screen_back_btn"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/cart_screen_back_btn" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@color/horizontal_line_color"
+                app:layout_constraintBottom_toBottomOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+</FrameLayout>

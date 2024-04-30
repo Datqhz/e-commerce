@@ -26,5 +26,6 @@
     <color name="transparent">#00000000</color>
     <color name="primary_color">#EE4D2D</color>
     <color name="blue_opacity_0.3">#E5E5FD</color>
+    <color name="horizontal_line_color">#c0c0c0</color>
 
 </resources>

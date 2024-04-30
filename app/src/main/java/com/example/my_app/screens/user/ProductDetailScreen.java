@@ -129,8 +129,10 @@ public class ProductDetailScreen extends Fragment {
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                bottomNavigationView.setVisibility(View.VISIBLE);
-                requireActivity().getSupportFragmentManager().popBackStack("home_screen", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                if (bottomNavigationView != null) {
+                    bottomNavigationView.setVisibility(View.VISIBLE);
+                }
+                requireActivity().getSupportFragmentManager().popBackStack();
             }
         });
 

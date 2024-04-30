@@ -105,7 +105,15 @@ public class HomeScreen extends AppCompatActivity {
         List<Category> categories = new ArrayList<>();
         List<Product> products = new ArrayList<>();
 
-        BuyerCategoryAdapter categoryAdapter = new BuyerCategoryAdapter(categories, HomeScreen.this);
+        BuyerCategoryAdapter categoryAdapter = new BuyerCategoryAdapter(categories, HomeScreen.this,
+                new BuyerCategoryAdapter.OnCategoryClickedListener() {
+                    @Override
+                    public void onCategoryClick(Category category) {
+                        Intent intent = new Intent(HomeScreen.this, ProductByCategory.class);
+                        intent.putExtra("category", category);
+                        startActivity(intent);
+                    }
+                });
         categoryRecyclerView.setAdapter(categoryAdapter);
 
         BuyerProductAdapter productAdapter = new BuyerProductAdapter(products, HomeScreen.this,

@@ -15,6 +15,9 @@
         android:theme="@style/Theme.My_app"
         tools:targetApi="31">
         <activity
+            android:name=".screens.user.ProductByCategory"
+            android:exported="false" />
+        <activity
             android:name=".screens.user.SearchByName"
             android:exported="false" />
         <activity

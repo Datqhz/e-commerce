@@ -26,7 +26,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SearchByName extends AppCompatActivity {
-
     RecyclerView recyclerView;
     ImageButton btnPrevious, btnSearch;
     EditText edtSearch;
@@ -58,9 +57,15 @@ public class SearchByName extends AppCompatActivity {
                     @Override
                     public void onProductClick(Product product) {
                         /// Nav to product detail
-                        Intent intent = new Intent(SearchByName.this, ProductDetailScreen.class);
-                        intent.putExtra("product", product);
-                        startActivity(intent);
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("product", product);
+
+                        ProductDetailScreen fragment = new ProductDetailScreen();
+                        fragment.setArguments(bundle);
+                        getSupportFragmentManager().beginTransaction().setReorderingAllowed(true)
+                                .replace(R.id.search_by_name_container, fragment)
+                                .addToBackStack("")
+                                .commit();
                     }
                 });
         recyclerView.setAdapter(adapter);
