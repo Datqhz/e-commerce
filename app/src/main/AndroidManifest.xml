@@ -18,6 +18,9 @@
             android:name=".screens.user.ChangePasswordScreen"
             android:exported="false" />
         <activity
+            android:name=".screens.user.ProductByCategory"
+            android:exported="false" />
+        <activity
             android:name=".screens.user.UpdateUserInfo"
             android:exported="false" />
         <activity
