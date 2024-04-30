@@ -303,10 +303,17 @@ public class AddProduct extends AppCompatActivity {
         }
     }
     private void uploadProductInfo(ArrayList<String> listImageUrl){
-        Product product = new Product((edtProductName.getText().toString().replaceAll("\\s+", " ")).trim(), listImageUrl,
-                edtDesc.getText().toString().trim(), edtPrice.getText().toString().trim()
-                , Integer.parseInt(edtQuantity.getText().toString().trim()), spCategory.getSelectedItem().toString(), "", uid);
-
+//        Product product = new Product((edtProductName.getText().toString().replaceAll("\\s+", " ")).trim(), listImageUrl,
+//                edtDesc.getText().toString().trim(), edtPrice.getText().toString().trim()
+//                , Integer.parseInt(edtQuantity.getText().toString().trim()), spCategory.getSelectedItem().toString(), "", uid);
+        Product product = new Product();
+        product.setProductName((edtProductName.getText().toString().replaceAll("\\s+", " ")).trim());
+        product.setListImageUrl(listImageUrl);
+        product.setDesc(edtDesc.getText().toString().trim());
+        product.setPrice(edtPrice.getText().toString().trim());
+        product.setQuantity(Integer.parseInt(edtQuantity.getText().toString().trim()));
+        product.setCategoryName(spCategory.getSelectedItem().toString());
+        product.setUid(uid);
 
         firestore.collection("products").add(product).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
             @Override

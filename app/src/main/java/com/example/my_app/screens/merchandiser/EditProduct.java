@@ -224,6 +224,21 @@ public class EditProduct extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(checkEdit){
+                    if (!listImageUrlDelete.isEmpty()) {
+                        for (int i = 0; i < listImageUrlDelete.size(); i++) {
+                            listImageUrl.remove(listImageUrlDelete.get(i));
+                        }
+
+                        for (int i = 0; i < listImageUrlDelete.size(); i++) {
+                            storageReference = storage.getReferenceFromUrl(listImageUrlDelete.get(i));
+                            storageReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void unused) {
+                                    //Toast.makeText(v.getContext(), "Xóa hình ảnh thành công", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
+                    }
                     updateProductInfo(listImageUrl);
                 }else {
                     editImageToStorage();

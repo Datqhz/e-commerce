@@ -20,6 +20,7 @@ import com.example.my_app.screens.admin.ShopPendingListScreen;
 import com.example.my_app.SplashScreen;
 import com.example.my_app.models.UserInfo;
 import com.example.my_app.screens.merchandiser.ProductManagement;
+import com.example.my_app.screens.user.HomeScreen;
 import com.example.my_app.shared.GlobalVariable;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -110,19 +111,16 @@ public class LoginScreen extends AppCompatActivity {
                                                         Log.d(TAG, "DocumentSnapshot data: " + document.getData());
                                                         //////Nav to suitable screen with roleId
                                                         if(userInfo.getRoleId().equals("SJBifnfNKREVcjRmZw9X")){ //admin
-                                                            Intent intent = new Intent(
-                                                                    LoginScreen.this,
-                                                                    ShopPendingListScreen.class);
+                                                            System.out.println("admin");
+                                                            Intent intent = new Intent(LoginScreen.this, ShopPendingListScreen.class);
                                                             startActivity(intent);
-                                                        }else if(userInfo.getRoleId().equals("49dczCwVNYLoChrME3nD")){ // buyer
-                                                            Intent intent = new Intent(
-                                                                    LoginScreen.this,
-                                                                    SplashScreen.class);
+                                                        }else if(userInfo.getRoleId().equals("49dczCwVNYLoChrME3nD")){ // shopper
+                                                            System.out.println("buyer");
+                                                            Intent intent = new Intent(LoginScreen.this, HomeScreen.class);
                                                             startActivity(intent);
                                                         }else {// Merchandiser
-                                                            Intent intent = new Intent(
-                                                                    LoginScreen.this,
-                                                                    ProductManagement.class);
+                                                            System.out.println("mer");
+                                                            Intent intent = new Intent(LoginScreen.this, ProductManagement.class);
                                                             startActivity(intent);
                                                         }
                                                         finish();
@@ -140,11 +138,7 @@ public class LoginScreen extends AppCompatActivity {
                                 .addOnFailureListener(new OnFailureListener() {
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
-                                        Toast.makeText(
-                                                LoginScreen.this,
-                                                "Số điện thoại hoặc mật khẩu sai!",
-                                                Toast.LENGTH_LONG)
-                                                .show();
+                                        Toast.makeText(LoginScreen.this,"Số điện thoại hoặc mật khẩu sai!", Toast.LENGTH_LONG).show();
 
                                     }
                                 });
@@ -154,7 +148,7 @@ public class LoginScreen extends AppCompatActivity {
                                 .trim()).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                             @Override
                             public void onSuccess(AuthResult authResult) {
-
+                                System.out.println("login success");
                                 if(auth.getCurrentUser().isEmailVerified()){
                                     db.collection("users").document(authResult.getUser()
                                                     .getUid()).get()
@@ -169,19 +163,13 @@ public class LoginScreen extends AppCompatActivity {
                                                             Log.d(TAG, "DocumentSnapshot data: " + document.getData());
                                                             //////Nav to suitable screen with roleId
                                                             if(userInfo.getRoleId().equals("SJBifnfNKREVcjRmZw9X")){ //admin
-                                                                Intent intent = new Intent(
-                                                                        LoginScreen.this,
-                                                                        ShopPendingListScreen.class);
+                                                                Intent intent = new Intent(LoginScreen.this, ShopPendingListScreen.class);
                                                                 startActivity(intent);
                                                             }else if(userInfo.getRoleId().equals("49dczCwVNYLoChrME3nD")){ // shopper
-                                                                Intent intent = new Intent(
-                                                                        LoginScreen.this,
-                                                                        SplashScreen.class);
+                                                                Intent intent = new Intent(LoginScreen.this, HomeScreen.class);
                                                                 startActivity(intent);
                                                             }else {// Merchandiser
-                                                                Intent intent = new Intent(
-                                                                        LoginScreen.this,
-                                                                        ProductManagement.class);
+                                                                Intent intent = new Intent(LoginScreen.this, ProductManagement.class);
                                                                 startActivity(intent);
                                                             }
                                                             finish();
@@ -196,10 +184,8 @@ public class LoginScreen extends AppCompatActivity {
                                             });
                                 }else {
                                     auth.signOut();
-                                    Toast.makeText(
-                                            LoginScreen.this,"Vui lòng xác thực email!",
-                                            Toast.LENGTH_LONG)
-                                            .show();
+                                    Toast.makeText(LoginScreen.this,"Vui lòng xác nhận email!", Toast.LENGTH_LONG).show();
+                                    System.out.println("not verify");
                                 }
 
                             }
@@ -207,20 +193,12 @@ public class LoginScreen extends AppCompatActivity {
                                 .addOnFailureListener(new OnFailureListener() {
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
-                                        Toast.makeText(
-                                                LoginScreen.this,
-                                                "Email hoặc mật khẩu sai!",
-                                                Toast.LENGTH_LONG)
-                                                .show();
+                                        Toast.makeText(LoginScreen.this,"Email hoặc mật khẩu sai!", Toast.LENGTH_LONG).show();
 
                                     }
                                 });
                     }else {
-                        Toast.makeText(
-                                LoginScreen.this,
-                                "Username bạn nhập vào không hợp lệ!",
-                                Toast.LENGTH_LONG)
-                                .show();;
+                        Toast.makeText(LoginScreen.this, "Username bạn nhập vào không hợp lệ!", Toast.LENGTH_LONG).show();;
                     }
                 }
             }

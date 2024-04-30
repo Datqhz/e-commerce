@@ -4,6 +4,9 @@ public class Cart {
     private String cartId;
     private String uid;
 
+    public Cart() {
+    }
+
     public Cart(String uid, String cartId) {
         this.uid = uid;
         this.cartId = cartId;

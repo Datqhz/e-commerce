@@ -20,10 +20,11 @@
     <color name="gold">#ffd700</color>
     <color name="pink">#ffc0cb</color>
     <color name="orange">#FD6B3E</color>
+    <color name="light_grey">#636363</color>
 
     <color name="primaryColor">#F75B22</color>
     <color name="transparent">#00000000</color>
+    <color name="primary_color">#EE4D2D</color>
     <color name="blue_opacity_0.3">#E5E5FD</color>
-
 
 </resources>

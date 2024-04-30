@@ -62,7 +62,8 @@ public class CategoryManagement extends AppCompatActivity {
     private CategoryAdapter categoryAdapter;
     private String categoryId;
     private Boolean isCreate = true;
-    private Boolean check = true;
+    private Boolean checkChangeImage = true;
+    private Boolean checkUpdateOrDelete = true;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,7 +109,7 @@ public class CategoryManagement extends AppCompatActivity {
                 btnEdit.setEnabled(true);
                 btnEdit.setTextColor(Color.WHITE);
             }
-        });
+        }, checkUpdateOrDelete);
         rvCategory.setAdapter(categoryAdapter);
     }
     private void getCategoryInfo() {
@@ -148,7 +149,7 @@ public class CategoryManagement extends AppCompatActivity {
         btnEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(check){
+                if(checkChangeImage){
                     updateCategory(imageUrlOld);
                 }else{
                     uploadImage();
@@ -170,7 +171,7 @@ public class CategoryManagement extends AppCompatActivity {
                     if (data != null && data.getData() != null) {
                         imageUri = data.getData();
                         imageCategory.setImageURI(imageUri);
-                        check = false;
+                        checkChangeImage = false;
                     }
                 }else{
                     Toast.makeText(CategoryManagement.this, "Vui lòng chọn hình ảnh Danh mục", Toast.LENGTH_LONG).show();
@@ -233,7 +234,7 @@ public class CategoryManagement extends AppCompatActivity {
                                         uploadCategoryInfo(imageUrlNew);
                                     }
                                     imageUri = null;
-                                    check = true;
+                                    checkChangeImage = true;
                                 }
                             }
                         }).addOnFailureListener(new OnFailureListener() {
@@ -299,7 +300,8 @@ public class CategoryManagement extends AppCompatActivity {
                 edtCategory.setText("");
                 imageCategory.setImageResource(R.drawable.dot_border_img_category);
                 isCreate = true;
-                btnSave.setEnabled(true);
+                checkUpdateOrDelete = true;
+            btnSave.setEnabled(true);
                 btnSave.setTextColor(Color.WHITE);
                 btnEdit.setEnabled(false);
                 btnEdit.setTextColor(Color.GRAY);

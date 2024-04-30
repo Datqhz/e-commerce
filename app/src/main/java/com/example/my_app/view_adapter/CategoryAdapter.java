@@ -34,10 +34,12 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
     private Context context;
     private ArrayList<Category> categoryArrayList;
     private GetData data;
-    public CategoryAdapter(Context context, ArrayList<Category> categoryArrayList, GetData data) {
+    private Boolean check;
+    public CategoryAdapter(Context context, ArrayList<Category> categoryArrayList, GetData data, Boolean check) {
         this.context = context;
         this.categoryArrayList = categoryArrayList;
         this.data = data;
+        this.check = check;
         firestore = FirebaseFirestore.getInstance();
         storage = FirebaseStorage.getInstance();
     }
@@ -57,6 +59,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
 
         holder.ivEdit.setOnClickListener(view ->{
+            check = false;
             data.onItemClick(categoryArrayList.get(holder.getAbsoluteAdapterPosition()));
         });
         holder.ivDelete.setOnClickListener(new View.OnClickListener() {
@@ -67,35 +70,39 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
                         .setPositiveButton("Có", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                int index=holder.getAbsoluteAdapterPosition();
-                                storageReference = storage.getReferenceFromUrl(categoryArrayList.get(index).getImageUrl());
-                                firestore.collection("categories").document(categoryArrayList.get(holder.getAbsoluteAdapterPosition())
-                                        .getCategoryId()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void unused) {
-                                        storageReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                                            @Override
-                                            public void onSuccess(Void unused) {
-                                                Toast.makeText(context, " Xóa danh mục thành công", Toast.LENGTH_SHORT).show();
-                                                notifyDataSetChanged();
-                                                dialog.dismiss();
-                                            }
-                                        }).addOnFailureListener(new OnFailureListener() {
-                                            @Override
-                                            public void onFailure(@NonNull Exception e) {
-                                                Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
-                                            }
-                                        });
+                                if(check == true) {
+                                    int index = holder.getAbsoluteAdapterPosition();
+                                    storageReference = storage.getReferenceFromUrl(categoryArrayList.get(index).getImageUrl());
+                                    firestore.collection("categories").document(categoryArrayList.get(holder.getAbsoluteAdapterPosition())
+                                            .getCategoryId()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void unused) {
+                                            storageReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void unused) {
+                                                    Toast.makeText(context, " Xóa danh mục thành công", Toast.LENGTH_SHORT).show();
+                                                    notifyDataSetChanged();
+                                                    dialog.dismiss();
+                                                }
+                                            }).addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                }
+                                            });
 
-                                    }
+                                        }
 
-                                }).addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-
+                                    }).addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                }else{
+                                    dialog.dismiss();
+                                    Toast.makeText(context, "Vui lòng thực hiện tiếp chỉnh sửa trước khi xóa danh mục khác", Toast.LENGTH_SHORT).show();
+                                }
                             }
                         });
                 builder.setNegativeButton("Không", new DialogInterface.OnClickListener() {
