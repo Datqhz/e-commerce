@@ -36,9 +36,12 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
 
+import java.io.Serializable;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
@@ -49,7 +52,7 @@ public class ProductDetailScreen extends Fragment {
     private ImageView backButton, cartButton, addToCartBtn;
     private ShapeableImageView productDetailShopImage;
     private TextView productPrice, productName, productRatingDisplay, productDetailDescText,
-            productDetailRatingBarText, productDetailTotalRatings, productDetailShopName;
+            productDetailRatingBarText, productDetailTotalRatings, productDetailShopName, buyNowBtn;
     private RatingBar productRatingBar;
 
     public ProductDetailScreen(BottomNavigationView bottomNavigationView) {
@@ -98,6 +101,7 @@ public class ProductDetailScreen extends Fragment {
         productDetailShopImage = view.findViewById(R.id.product_detail_shop_image);
         productDetailShopName = view.findViewById(R.id.product_detail_shop_name);
         addToCartBtn = view.findViewById(R.id.product_detail_add_to_cart_btn);
+        buyNowBtn = view.findViewById(R.id.product_detail_buy_now_btn);
 
         productName.setText(product.getProductName());
         productPrice.setText("đ" + product.getPrice());
@@ -129,8 +133,10 @@ public class ProductDetailScreen extends Fragment {
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                bottomNavigationView.setVisibility(View.VISIBLE);
-                requireActivity().getSupportFragmentManager().popBackStack("home_screen", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                if (bottomNavigationView != null) {
+                    bottomNavigationView.setVisibility(View.VISIBLE);
+                }
+                requireActivity().getSupportFragmentManager().popBackStack();
             }
         });
 
@@ -141,6 +147,34 @@ public class ProductDetailScreen extends Fragment {
                 getParentFragmentManager().beginTransaction().setReorderingAllowed(true)
                         .replace(R.id.product_detail_container, cartScreen)
                         .addToBackStack("cart_screen")
+                        .commit();
+            }
+        });
+
+        buyNowBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                List<Product> products = new ArrayList<>();
+                List<CartDetail> cartDetails = new ArrayList<>();
+                String price = product.getPrice();
+
+                products.add(product);
+                CartDetail cartDetail = new CartDetail();
+                cartDetail.setCartId("anonymous");
+                cartDetail.setProductId(product.getProductId());
+                cartDetail.setQuantity(1);
+                cartDetails.add(cartDetail);
+
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("products", (Serializable) products);
+                bundle.putSerializable("cartDetails", (Serializable) cartDetails);
+                bundle.putSerializable("totalPayment", (Serializable) price);
+
+                PaymentScreen paymentScreen = new PaymentScreen(bottomNavigationView);
+                paymentScreen.setArguments(bundle);
+                getParentFragmentManager().beginTransaction().setReorderingAllowed(true)
+                        .replace(R.id.product_detail_container, paymentScreen)
+                        .addToBackStack("")
                         .commit();
             }
         });

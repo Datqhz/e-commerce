@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.my_app.R;
 import com.example.my_app.models.Category;
+import com.example.my_app.models.Product;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -20,10 +21,12 @@ import java.util.List;
 public class BuyerCategoryAdapter extends RecyclerView.Adapter<BuyerCategoryAdapter.ViewHolder> {
     List<Category> categories;
     Context context;
+    private OnCategoryClickedListener listener;
 
-    public BuyerCategoryAdapter(List<Category> categories, Context context) {
+    public BuyerCategoryAdapter(List<Category> categories, Context context, OnCategoryClickedListener listener) {
         this.categories = categories;
         this.context = context;
+        this.listener = listener;
     }
 
     @NonNull
@@ -44,7 +47,7 @@ public class BuyerCategoryAdapter extends RecyclerView.Adapter<BuyerCategoryAdap
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, category.getCategory(), Toast.LENGTH_SHORT).show();
+                listener.onCategoryClick(category);
             }
         });
     }
@@ -64,4 +67,8 @@ public class BuyerCategoryAdapter extends RecyclerView.Adapter<BuyerCategoryAdap
             categoryDescription = itemView.findViewById(R.id.categoryDescription);
         }
     }
+
+    public interface OnCategoryClickedListener {
+        void onCategoryClick(Category category);
+    };
 }
