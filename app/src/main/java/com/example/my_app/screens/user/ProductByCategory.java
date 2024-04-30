@@ -36,7 +36,7 @@ public class ProductByCategory extends AppCompatActivity {
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
     private BuyerProductAdapter adapter;
-    private ImageView backBtn;
+    private ImageView backBtn, noProductImage;
     private List<Product> products = new ArrayList<>();
 
     @Override
@@ -57,6 +57,7 @@ public class ProductByCategory extends AppCompatActivity {
         recyclerView = findViewById(R.id.product_by_category_list_item);
         progressBar = findViewById(R.id.product_by_category_progress_circle);
         backBtn = findViewById(R.id.product_by_category_back_btn);
+        noProductImage = findViewById(R.id.product_by_category_no_product_image);
     };
 
     public void setEvent(Category category) {
@@ -96,8 +97,12 @@ public class ProductByCategory extends AppCompatActivity {
                                 Product item = product.toObject(Product.class);
                                 products.add(item);
                             }
-                            progressBar.setVisibility(View.INVISIBLE);
+                            progressBar.setVisibility(View.GONE);
+                            noProductImage.setVisibility(View.GONE);
                             adapter.notifyDataSetChanged();
+                        } else {
+                            progressBar.setVisibility(View.GONE);
+                            noProductImage.setVisibility(View.VISIBLE);
                         }
                     }
                 });

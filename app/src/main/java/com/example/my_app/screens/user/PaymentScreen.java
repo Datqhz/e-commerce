@@ -178,7 +178,10 @@ public class PaymentScreen extends Fragment {
                                         throw new RuntimeException(e);
                                     }
                                 }
-                                removeProductInCart(product);
+
+                                if (!Objects.equals(cartDetails.get(0).getCartId(), "anonymous")) {
+                                    removeProductInCart(product);
+                                }
 
                                 db.collection("products").document(product.getProductId()).update("quantity", product.getQuantity() - quantity);
 
