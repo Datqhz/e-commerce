@@ -173,8 +173,6 @@ public class CategoryManagement extends AppCompatActivity {
                         imageCategory.setImageURI(imageUri);
                         checkChangeImage = false;
                     }
-                }else{
-                    Toast.makeText(CategoryManagement.this, "Vui lòng chọn hình ảnh Danh mục", Toast.LENGTH_LONG).show();
                 }
             }
     );

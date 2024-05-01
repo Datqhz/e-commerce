@@ -26,6 +26,7 @@ import com.example.my_app.models.UserInfo;
 import com.example.my_app.screens.admin.CategoryManagement;
 import com.example.my_app.screens.admin.ShopPendingListScreen;
 import com.example.my_app.screens.authenticate.MainActivity;
+import com.example.my_app.shared.GlobalVariable;
 import com.example.my_app.view_adapter.ProductAdapter;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -79,7 +80,7 @@ public class ProductManagement extends AppCompatActivity {
 
     }
     private void getProductInfo() {
-        firestore.collection("products")
+        firestore.collection("products").whereEqualTo("uid", GlobalVariable.userInfo.getUid())
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
@@ -154,10 +155,10 @@ public class ProductManagement extends AppCompatActivity {
             AlertDialog dialog = builder.create();
             dialog.show();
             return true;
-        }else  if(itemid == R.id.menu_item_statics){
-//            Intent intent = new Intent(ProductManagement.this, AddProduct.class);
-//            startActivity(intent);
-//            return true;
+        }else  if(itemid == R.id.menu_item_userInfo){
+            Intent intent = new Intent(ProductManagement.this, MerchandiserInfo.class);
+            startActivity(intent);
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }

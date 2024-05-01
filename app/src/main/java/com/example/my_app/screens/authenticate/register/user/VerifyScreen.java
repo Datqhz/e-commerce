@@ -104,7 +104,6 @@ public class VerifyScreen extends AppCompatActivity {
             System.out.println("start create");
             Executors.newSingleThreadExecutor().submit(this::createUserWithEmailAndPassword);
 //            CompletableFuture.runAsync(this::createUserWithEmailAndPassword);
-            System.out.println("created");
             Intent i = new Intent(getApplicationContext(), MainActivity.class);
             i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(i);

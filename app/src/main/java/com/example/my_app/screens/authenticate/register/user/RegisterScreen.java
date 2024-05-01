@@ -110,6 +110,7 @@ public class RegisterScreen extends AppCompatActivity {
                     userInfo.setCreateDate(new Date());
                     userInfo.setRoleId("49dczCwVNYLoChrME3nD");
                     userInfo.setStatus(true);
+                    userInfo.setAvatarLink("https://firebasestorage.googleapis.com/v0/b/e-commerce-e6344.appspot.com/o/imageUsers%2Fdefault.png?alt=media&token=c1365a9b-f852-43ca-b9ed-23b8aeccc948");
                     if(isPhone){
                         userInfo.setPhone(edtUsername.getText().toString().trim());
                         Intent intent = new Intent(RegisterScreen.this, VerifyScreen.class);
@@ -166,13 +167,17 @@ public class RegisterScreen extends AppCompatActivity {
                                     .addOnFailureListener(new OnFailureListener() {
                                         @Override
                                         public void onFailure(@NonNull Exception e) {
-                                            Toast.makeText(getApplicationContext(), "Tạo tài khoản không thành công!", Toast.LENGTH_LONG).show();
+                                            Toast.makeText(getApplicationContext(),
+                                                    "Tạo tài khoản không thành công!",
+                                                    Toast.LENGTH_LONG).show();
                                             user.delete();
                                         }
                                     });
                         } else {
                             // Handle errors during user creation
-                            Toast.makeText(getApplicationContext(),"Xảy ra lỗi trong quá trình tào tài khoản", Toast.LENGTH_LONG);
+                            Toast.makeText(getApplicationContext(),
+                                    "Xảy ra lỗi trong quá trình tào tài khoản",
+                                    Toast.LENGTH_LONG);
                             Log.e(TAG, "Error creating user", task.getException());
                             finish();
                         }

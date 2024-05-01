@@ -92,21 +92,30 @@ public class ShopInfoScreen extends AppCompatActivity {
         btnDecline.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                    FirebaseFirestore.getInstance().collection("shopPendings").document(shop.getShopId()).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                    FirebaseFirestore.getInstance()
+                            .collection("shopPendings")
+                            .document(shop.getShopId())
+                            .delete().addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
-                            Toast.makeText(getApplicationContext(), "Đã từ chối đơn đăng ký bán hàng của shop " + shop.getDisplayName(), Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(),
+                                    "Đã từ chối đơn đăng ký bán hàng của shop " + shop.getDisplayName(),
+                                    Toast.LENGTH_LONG).show();
                                 StorageReference ref = FirebaseStorage.getInstance().getReference();
                                 for(String path: shop.getCCCDImg()){
                                     ref.child(path).delete();
                                 }
-                                new SendEmailTask("Từ chối mở tài khoản bán hàng", "Đơn đăng ký bán hàng đã bị admin từ chối mở tài khoản.", shop.getEmail()).execute();
+                                new SendEmailTask("Từ chối mở tài khoản bán hàng",
+                                        "Đơn đăng ký bán hàng đã bị admin từ chối mở tài khoản.",
+                                        shop.getEmail()).execute();
                             finish();
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(getApplicationContext(), "Xảy ra lỗi trong quá trình từ chối!", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(),
+                                    "Xảy ra lỗi trong quá trình từ chối!",
+                                    Toast.LENGTH_LONG).show();
                         }
                     });
 
@@ -126,14 +135,22 @@ public class ShopInfoScreen extends AppCompatActivity {
                                         .addOnCompleteListener(task1 -> {
                                             if (task1.isSuccessful()) {
                                                 System.out.println("sent email verify success");
-                                                Toast.makeText(getApplicationContext(), "Đơn đăng ký của shop "+ shop.getDisplayName() + " đã được duyệt.", Toast.LENGTH_LONG).show();
+                                                Toast.makeText(getApplicationContext(),
+                                                        "Đơn đăng ký của shop "+ shop.getDisplayName() + " đã được duyệt.",
+                                                        Toast.LENGTH_LONG).show();
                                                 UserInfo tempUser = new UserInfo();
                                                 tempUser.mapFromShopPendingToUser(shop);
                                                 tempUser.setUid(user.getUid());
-                                                FirebaseFirestore.getInstance().collection("users").document(user.getUid()).set(tempUser).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                tempUser.setAvatarLink("https://firebasestorage.googleapis.com/v0/b/e-commerce-e6344.appspot.com/o/imageUsers%2Fdefault.png?alt=media&token=c1365a9b-f852-43ca-b9ed-23b8aeccc948");
+                                                FirebaseFirestore.getInstance().collection("users")
+                                                        .document(user.getUid()).set(tempUser)
+                                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
                                                     @Override
                                                     public void onComplete(@NonNull Task<Void> task) {
-                                                        FirebaseFirestore.getInstance().collection("shopPendings").document(shop.getShopId()).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                        FirebaseFirestore.getInstance()
+                                                                .collection("shopPendings")
+                                                                .document(shop.getShopId())
+                                                                .delete().addOnCompleteListener(new OnCompleteListener<Void>() {
                                                             @Override
                                                             public void onComplete(@NonNull Task<Void> task) {
                                                                 tempApp.delete();
@@ -142,7 +159,9 @@ public class ShopInfoScreen extends AppCompatActivity {
                                                         }).addOnFailureListener(new OnFailureListener() {
                                                             @Override
                                                             public void onFailure(@NonNull Exception e) {
-                                                                Toast.makeText(getApplicationContext(), "Xảy ra lỗi trong quá trình xử lý thông tin", Toast.LENGTH_LONG).show();
+                                                                Toast.makeText(getApplicationContext(),
+                                                                        "Xảy ra lỗi trong quá trình xử lý thông tin",
+                                                                        Toast.LENGTH_LONG).show();
                                                             }
                                                         });
                                                     }
@@ -164,13 +183,21 @@ public class ShopInfoScreen extends AppCompatActivity {
                                         new SendEmailTask("Đơn đăng ký đã đươợc duyệt!",
                                                 "Đơn đăng ký bán hàng đã được admin chấp nhận.\nTên đăng nhập của bạn là "+shop.getPhone(),
                                                 shop.getEmail()).execute();
-                                        Toast.makeText(getApplicationContext(), "Đơn đăng ký của shop "+ shop.getDisplayName() + " đã được duyệt.", Toast.LENGTH_LONG).show();
+                                        Toast.makeText(getApplicationContext(),
+                                                "Đơn đăng ký của shop "+ shop.getDisplayName() + " đã được duyệt.",
+                                                Toast.LENGTH_LONG).show();
                                         UserInfo tempUser = new UserInfo();
                                         tempUser.mapFromShopPendingToUser(shop);
-                                        FirebaseFirestore.getInstance().collection("users").document(user.getUid()).set(tempUser).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        FirebaseFirestore.getInstance()
+                                                .collection("users")
+                                                .document(user.getUid()).set(tempUser)
+                                                .addOnCompleteListener(new OnCompleteListener<Void>() {
                                             @Override
                                             public void onComplete(@NonNull Task<Void> task) {
-                                                FirebaseFirestore.getInstance().collection("shopPendings").document(shop.getShopId()).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                FirebaseFirestore.getInstance()
+                                                        .collection("shopPendings")
+                                                        .document(shop.getShopId()).delete()
+                                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
                                                     @Override
                                                     public void onComplete(@NonNull Task<Void> task) {
                                                         tempApp.delete();
@@ -179,7 +206,9 @@ public class ShopInfoScreen extends AppCompatActivity {
                                                 }).addOnFailureListener(new OnFailureListener() {
                                                     @Override
                                                     public void onFailure(@NonNull Exception e) {
-                                                        Toast.makeText(getApplicationContext(), "Xảy ra lỗi trong quá trình xử lý thông tin", Toast.LENGTH_LONG).show();
+                                                        Toast.makeText(getApplicationContext(),
+                                                                "Xảy ra lỗi trong quá trình xử lý thông tin",
+                                                                Toast.LENGTH_LONG).show();
                                                     }
                                                 });
                                             }
@@ -193,7 +222,9 @@ public class ShopInfoScreen extends AppCompatActivity {
                                         new SendEmailTask("Đơn đăng ký đã bị hủy!",
                                                 "Đơn đăng ký bán hàng đã bị hủy.\nLý do: Email và số điện thoại của bạn đã được sử dụng để đăng ký tài khoản.",
                                                 shop.getEmail()).execute();
-                                        Toast.makeText(getApplicationContext(), "Đơn đăng ký của shop "+ shop.getDisplayName() + " đã bị hủy.\n Mã lỗi: Email và SDT đã được sử dụng.", Toast.LENGTH_LONG).show();
+                                        Toast.makeText(getApplicationContext(),
+                                                "Đơn đăng ký của shop "+ shop.getDisplayName() + " đã bị hủy.\n Mã lỗi: Email và SDT đã được sử dụng.",
+                                                Toast.LENGTH_LONG).show();
                                         tempApp.delete();
                                     }
                                 });

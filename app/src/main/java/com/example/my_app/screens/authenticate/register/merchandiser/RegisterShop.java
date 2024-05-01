@@ -1,5 +1,6 @@
 package com.example.my_app.screens.authenticate.register.merchandiser;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -13,6 +14,11 @@ import com.example.my_app.R;
 import com.example.my_app.models.ShopPending;
 import com.example.my_app.models.UserInfo;
 import com.example.my_app.screens.authenticate.LoginScreen;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.Date;
 
@@ -61,11 +67,23 @@ public class RegisterShop extends AppCompatActivity {
                     edtPhone.setError("Vui lòng nhập SDT!");
                     edtPhone.setFocusable(true);
                     canNext = false;
+                }else {
+                    if(!isValidPhoneNumber(edtPhone.getText().toString().trim())){
+                        edtPhone.setError("Số điện thoại không hợp lệ!");
+                        edtPhone.setFocusable(true);
+                        canNext = false;
+                    }
                 }
                 if(edtEmail.getText().toString().trim().equals("")){
                     edtEmail.setError("Vui lòng nhập email!");
                     edtEmail.setFocusable(true);
                     canNext = false;
+                }else {
+                    if(!isValidEmail(edtEmail.getText().toString().trim())){
+                        edtEmail.setError("Email không hợp lệ!");
+                        edtEmail.setFocusable(true);
+                        canNext = false;
+                    }
                 }
                 if(edtPassword.getText().toString().trim().equals("")){
                     edtPassword.setError("Vui lòng nhập mật khẩu!");
@@ -82,6 +100,12 @@ public class RegisterShop extends AppCompatActivity {
                     edtCCCD.setError("Vui lòng nhập số CCCD!");
                     edtCCCD.setFocusable(true);
                     canNext = false;
+                }else {
+                    if(edtCCCD.getText().toString().trim().length() != 12){
+                        edtCCCD.setError("Độ dài CCCD không hợp lệ!");
+                        edtCCCD.setFocusable(true);
+                        canNext = false;
+                    }
                 }
 
                 if(canNext){
@@ -98,5 +122,14 @@ public class RegisterShop extends AppCompatActivity {
                 }
             }
         });
+    }
+    private boolean isValidPhoneNumber(String phoneNumber) {
+        // Match a number with optional '-' and decimal
+        String regex = "^\\d{10}$"; // For ten-digit numbers
+        return phoneNumber.matches(regex);
+    }
+    private boolean isValidEmail(String email) {
+        String regex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
+        return email.matches(regex);
     }
 }

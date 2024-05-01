@@ -98,8 +98,6 @@ public class AddProduct extends AppCompatActivity {
                     }
                 }
                 productAdapterImage.notifyDataSetChanged();
-            }else{
-                Toast.makeText(AddProduct.this, "Vui lòng chọn hình ảnh sản phẩm", Toast.LENGTH_LONG).show();
             }
         }
     });

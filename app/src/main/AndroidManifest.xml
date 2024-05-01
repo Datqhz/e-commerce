@@ -15,6 +15,10 @@
         android:theme="@style/Theme.My_app"
         tools:targetApi="31">
         <activity
+            android:name=".screens.merchandiser.MerchandiserInfo"
+            android:exported="false"
+            android:parentActivityName=".screens.merchandiser.ProductManagement"/>
+        <activity
             android:name=".screens.user.ChangePasswordScreen"
             android:exported="false" />
         <activity

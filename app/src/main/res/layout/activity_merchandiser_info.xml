@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".screens.merchandiser.MerchandiserInfo">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/orange"
+        android:minHeight="?attr/actionBarSize"
+        app:title="Chỉnh sửa thông tin người bán"
+        app:titleTextColor="@android:color/white" />
+
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="5dp"
+        android:layout_gravity="center"
+        android:scaleType="fitXY"
+        android:src="@drawable/dot_border_img_category"/>
+
+    <EditText
+        android:id="@+id/edtDisplayName"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:backgroundTint="@color/white"
+        android:fontFamily="@font/roboto_regular"
+        android:textAlignment="center"
+        android:hint="Nhập tên" />
+    <Button
+        android:id="@+id/btnSave"
+        android:layout_width="170dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        app:backgroundTint="@color/orange"
+        android:fontFamily="@font/roboto_regular"
+        android:textColor="@color/white"
+        android:text="Lưu" />
+
+</LinearLayout>
