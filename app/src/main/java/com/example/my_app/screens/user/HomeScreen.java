@@ -3,6 +3,7 @@ package com.example.my_app.screens.user;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -16,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -34,6 +36,7 @@ import com.google.android.flexbox.JustifyContent;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -83,6 +86,31 @@ public class HomeScreen extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                Fragment selectedFragment = null;
+                Intent selectedActivity = null;
+                int id = menuItem.getItemId();
+                if (id == R.id.navigation_home) {
+                    selectedActivity = new Intent(HomeScreen.this, HomeScreen.class);
+                    startActivity(selectedActivity);
+                } else if (id == R.id.navigation_category) {
+                    selectedFragment = new CategoryScreen();
+                } else if (id == R.id.navigation_profile) {
+                    selectedFragment = new ProfileScreen();
+                }
+                if (selectedFragment != null) {
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.home_fragment_container, selectedFragment)
+                            .addToBackStack("")
+                            .commit();
+                }
+                return true;
+            }
+        });
+
         RecyclerView categoryRecyclerView = findViewById(R.id.categories);
         categoryRecyclerView.setHasFixedSize(true);
 

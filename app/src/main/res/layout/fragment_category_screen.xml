@@ -4,62 +4,85 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".screens.user.CategoryScreen">
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <androidx.constraintlayout.widget.ConstraintLayout
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingVertical="10dp"
-            android:id="@+id/cart_screen_header">
+            android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/cart_screen_back_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:src="@drawable/icon_back_arrow_32"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Giỏ hàng"
-                android:textSize="20sp"
-                android:layout_marginStart="14dp"
-                app:layout_constraintBottom_toBottomOf="@+id/cart_screen_back_btn"
-                app:layout_constraintStart_toEndOf="@+id/cart_screen_back_btn"
-                app:layout_constraintTop_toTopOf="@+id/cart_screen_back_btn"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="20dp"
-                android:text="Sửa"
-                app:layout_constraintBottom_toBottomOf="@+id/cart_screen_back_btn"
-                app:layout_constraintEnd_toStartOf="@+id/cart_screen_message_btn"
-                app:layout_constraintTop_toTopOf="@+id/cart_screen_back_btn"/>
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/cart_screen_message_btn"
-                android:layout_marginEnd="16dp"
-                android:src="@drawable/icon_message_32"
-                app:layout_constraintBottom_toBottomOf="@+id/cart_screen_back_btn"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/cart_screen_back_btn" />
-
-            <View
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/category_screen_header"
                 android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:background="@color/horizontal_line_color"
-                app:layout_constraintBottom_toBottomOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                android:layout_height="wrap_content"
+                android:paddingVertical="10dp">
 
+                <ImageView
+                    android:id="@+id/category_screen_logo"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:src="@drawable/shop_logo"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="14dp"
+                    android:text="Danh mục"
+                    android:textSize="20sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/category_screen_logo"
+                    app:layout_constraintStart_toEndOf="@+id/category_screen_logo"
+                    app:layout_constraintTop_toTopOf="@+id/category_screen_logo" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="@color/horizontal_line_color"
+                    app:layout_constraintBottom_toBottomOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <ImageView
+                android:id="@+id/category_screen_no_category_image"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/no_category_found"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/category_screen_header" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/category_screen_list_item"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ProgressBar
+                    android:id="@+id/category_screen_progress_circle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="@+id/category_screen_list_item"
+                    app:layout_constraintEnd_toEndOf="@+id/category_screen_list_item"
+                    app:layout_constraintStart_toStartOf="@+id/category_screen_list_item"
+                    app:layout_constraintTop_toTopOf="@+id/category_screen_list_item" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
     </ScrollView>
 </FrameLayout>
