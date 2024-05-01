@@ -2,7 +2,7 @@ package com.example.my_app.models;
 
 public class Rating {
     private String uid;
-    private int rating;
+    private float rating;
     private String comment;
 
     public Rating() {
@@ -22,11 +22,11 @@ public class Rating {
         this.uid = uid;
     }
 
-    public int getRating() {
+    public float getRating() {
         return rating;
     }
 
-    public void setRating(int rating) {
+    public void setRating(float rating) {
         this.rating = rating;
     }
 

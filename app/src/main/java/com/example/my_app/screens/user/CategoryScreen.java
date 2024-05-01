@@ -85,6 +85,10 @@ public class CategoryScreen extends Fragment {
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         if (!queryDocumentSnapshots.isEmpty()) {
                             List<DocumentSnapshot> categoriesDocs = queryDocumentSnapshots.getDocuments();
+
+                            if (!categories.isEmpty())
+                                categories.clear();
+
                             for (DocumentSnapshot category : categoriesDocs) {
                                 Category item = category.toObject(Category.class);
                                 categories.add(item);
