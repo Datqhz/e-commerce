@@ -231,18 +231,18 @@ public class Revenue extends AppCompatActivity {
                                                                                                     // Cập nhật tổng doanh thu của tháng
                                                                                                     int newRevenue = monthlyRevenueMap.getOrDefault(completedMonth, 0);
 
-                                                                                                    newRevenue += price;
+                                                                                                    newRevenue += price * quantity;
 
                                                                                                     monthlyRevenueMap.put(completedMonth, newRevenue);
 
-                                                                                                    totalRevenue[0] += price;
+                                                                                                    totalRevenue[0] += price * quantity;
 
 
                                                                                                     String newKey = productSnapshot.getString("productName"); // Đây là khóa muốn thêm vào Map
                                                                                                     if (!nameAndTotalQuantity.containsKey(newKey)) {
                                                                                                         // Nếu khóa không tồn tại trong Map, thêm khóa mới với giá trị quantity
                                                                                                         nameAndTotalQuantity.put(newKey, quantity);
-                                                                                                        nameAndTotalAvenue.put(newKey, price);
+                                                                                                        nameAndTotalAvenue.put(newKey, price * quantity);
                                                                                                     } else {
                                                                                                         // Nếu khóa đã tồn tại trong Map, không thực hiện ghi đè giá trị
                                                                                                         // Cập nhật tổng doanh thu của tháng
@@ -251,7 +251,7 @@ public class Revenue extends AppCompatActivity {
                                                                                                         nameAndTotalQuantity.put(newKey, tempQuantity);
 
                                                                                                         int tempAvenue = nameAndTotalAvenue.getOrDefault(newKey, 0);
-                                                                                                        tempAvenue += price;
+                                                                                                        tempAvenue += price * quantity;
                                                                                                         nameAndTotalAvenue.put(newKey, tempAvenue);
                                                                                                     }
 
@@ -264,6 +264,7 @@ public class Revenue extends AppCompatActivity {
                                                                                             //Gán tổng doanh thu vào text view
                                                                                             NumberFormat formatter = NumberFormat.getNumberInstance(new Locale("vi", "VN"));
                                                                                             tvRevenue.setText(formatter.format(totalRevenue[0]));
+
                                                                                             uniqueQuantity = nameAndTotalQuantity;
                                                                                             uniqueAvenue = nameAndTotalAvenue;
 
