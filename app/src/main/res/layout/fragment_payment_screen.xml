@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
+    android:id="@+id/payment_screen_container"
     tools:context=".screens.user.PaymentScreen">
 
     <ScrollView
@@ -68,6 +69,7 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/payment_screen_address_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="28dp"
@@ -97,9 +99,10 @@
                             android:id="@+id/payment_screen_phone_number"/>
                     </LinearLayout>
                     <TextView
+                        android:id="@+id/payment_screen_address"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="233A Đ. Phan Văn Trị, Phường 11, Bình Thạnh, Thành phố Hồ Chí Minh, Việt Nam"
+                        android:text="address"
                         android:maxLines="2"/>
                 </LinearLayout>
             </LinearLayout>
@@ -254,7 +257,10 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="2dp"
-            android:background="@color/horizontal_line_color"/>
+            android:background="@color/horizontal_line_color"
+            app:layout_constraintBottom_toTopOf="@+id/payment_screen_buy_btn"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <LinearLayout
             android:layout_width="wrap_content"

@@ -6,6 +6,7 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -15,11 +16,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.my_app.R;
+import com.example.my_app.models.Address;
 import com.example.my_app.models.Cart;
 import com.example.my_app.models.CartDetail;
 import com.example.my_app.models.OrderDetail;
@@ -40,6 +43,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.NumberFormat;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -57,7 +61,8 @@ public class PaymentScreen extends Fragment {
     private RecyclerView productPaymentContainer;
     private ProgressBar progressBar;
     private TextView paymentButton;
-    private TextView totalPrice, totalPayment, totalPaymentFinal;
+    private TextView totalPrice, totalPayment, totalPaymentFinal, userNumber, userName, userAddress;
+    private LinearLayout addressContainer;
 
     public PaymentScreen() {
     }
@@ -93,14 +98,22 @@ public class PaymentScreen extends Fragment {
         totalPrice = view.findViewById(R.id.payment_screen_total_price);
         totalPayment = view.findViewById(R.id.payment_screen_total_payment);
         totalPaymentFinal = view.findViewById(R.id.payment_screen_total_payment_final);
+        userName = view.findViewById(R.id.payment_screen_name);
+        userNumber = view.findViewById(R.id.payment_screen_phone_number);
+        userAddress = view.findViewById(R.id.payment_screen_address);
+        addressContainer = view.findViewById(R.id.payment_screen_address_container);
+
         totalPrice.setText("đ" + totalPaymentPrice);
         totalPayment.setText("đ" + totalPaymentPrice);
         totalPaymentFinal.setText("đ" + totalPaymentPrice);
+        userName.setText(GlobalVariable.getUserInfo().getDisplayName());
+        userNumber.setText(GlobalVariable.getUserInfo().getPhone());
     }
 
     private void setEvent(List<Product> products, List<CartDetail> cartDetails) {
         setOrderItemView(products, cartDetails);
         makePayment();
+
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -268,6 +281,39 @@ public class PaymentScreen extends Fragment {
                 });
     }
 
+    private void handleAddressLogic() {
+        db = FirebaseFirestore.getInstance();
+
+        db.collection("address").whereEqualTo("uid", GlobalVariable.getUserInfo().getUid())
+                .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        if (!queryDocumentSnapshots.isEmpty()) {
+                            List<DocumentSnapshot> addressDocs = queryDocumentSnapshots.getDocuments();
+                            for (DocumentSnapshot document : addressDocs) {
+                                Address address = document.toObject(Address.class);
+                                if (address.isDefault())
+                                    userAddress.setText(address.getAddress());
+                            }
+                        }
+                    }
+                });
+
+        addressContainer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentManager fragmentManager = getParentFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+                AddressScreen addressFragment = new AddressScreen();
+                fragmentTransaction.setReorderingAllowed(true)
+                        .replace(R.id.payment_screen_container, addressFragment)
+                        .addToBackStack("")
+                        .commit();
+            }
+        });
+    }
+
     private final OnBackPressedCallback onBackPressedPaymentCallback = new OnBackPressedCallback(true) {
         @Override
         public void handleOnBackPressed() {
@@ -278,5 +324,11 @@ public class PaymentScreen extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        handleAddressLogic();
     }
 }
