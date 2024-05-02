@@ -22,6 +22,7 @@ import com.denzcoskun.imageslider.models.SlideModel;
 import com.example.my_app.R;
 import com.example.my_app.models.Cart;
 import com.example.my_app.models.CartDetail;
+import com.example.my_app.models.Orders;
 import com.example.my_app.models.Product;
 import com.example.my_app.models.Rating;
 import com.example.my_app.models.UserInfo;
@@ -34,6 +35,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.SetOptions;
 import com.squareup.picasso.Picasso;
 
 import java.io.Serializable;
@@ -87,6 +89,7 @@ public class ProductDetailScreen extends Fragment {
     public void setControl(View view, Product product) {
         float avgRating = 0;
         int ratingNum = 0;
+        float myRating = 0;
 
         imageSlider = view.findViewById(R.id.product_detail_image_slider);
         backButton = view.findViewById(R.id.product_detail_back_button);
@@ -108,14 +111,17 @@ public class ProductDetailScreen extends Fragment {
         if (product.getRatings() != null) {
             ratingNum = product.getRatings().size();
             for (Rating rating : product.getRatings()) {
+                if (Objects.equals(rating.getUid(), GlobalVariable.getUserInfo().getUid())) {
+                    myRating = rating.getRating();
+                }
                 avgRating += rating.getRating();
             }
             avgRating = avgRating / ratingNum;
         }
         productRatingDisplay.setText(avgRating + " / 5");
         productDetailDescText.setText(product.getDesc());
-        productRatingBar.setRating(avgRating);
-        productDetailRatingBarText.setText(avgRating + "/5");
+        productRatingBar.setRating(myRating);
+        productDetailRatingBarText.setText(myRating + "/5");
         productDetailTotalRatings.setText("(" + ratingNum + " đánh giá)");
     }
 
@@ -148,6 +154,60 @@ public class ProductDetailScreen extends Fragment {
                         .replace(R.id.product_detail_container, cartScreen)
                         .addToBackStack("cart_screen")
                         .commit();
+            }
+        });
+
+        productRatingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                final boolean[] isToastShown = {false};
+
+                Rating ratingData = new Rating();
+                ratingData.setUid(GlobalVariable.getUserInfo().getUid());
+                ratingData.setRating(rating);
+                ratingData.setComment("");
+
+                db.collection("orders").whereEqualTo("uid", GlobalVariable.getUserInfo().getUid())
+                                .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                            @Override
+                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                if (!queryDocumentSnapshots.isEmpty()) {
+                                    List<DocumentSnapshot> orderDocs = queryDocumentSnapshots.getDocuments();
+                                    for (DocumentSnapshot order : orderDocs) {
+                                        Orders orderItem = order.toObject(Orders.class);
+
+                                        db.collection("order_detail")
+                                                .whereEqualTo("orderId", orderItem.getOrderId())
+                                                .whereEqualTo("productId", product.getProductId())
+                                                .get()
+                                                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                                    @Override
+                                                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                                        if (!queryDocumentSnapshots.isEmpty()) {
+                                                            if (!isToastShown[0]) {
+                                                                ratingProduct(product, ratingData, view);
+                                                                isToastShown[0] = true;
+                                                            }
+                                                        } else {
+                                                            if (!isToastShown[0]) {
+                                                                Toast.makeText(view.getContext(), "Bạn không thể đánh giá sản phẩm này", Toast.LENGTH_SHORT).show();
+                                                                isToastShown[0] = true;
+                                                                productRatingBar.setRating(0);
+                                                            }
+                                                        }
+                                                    }
+                                                }).addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
+                                                        Toast.makeText(view.getContext(), "Đánh giá sản phẩm thất bại", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                });
+                                    }
+                                } else {
+                                    Toast.makeText(view.getContext(), "Bạn không thể đánh giá sản phẩm này", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
             }
         });
 
@@ -268,6 +328,25 @@ public class ProductDetailScreen extends Fragment {
             }
         });
 
+    }
+
+    private void ratingProduct(Product product, Rating ratingData, View view) {
+        db.collection("products").document(product.getProductId())
+                .collection("ratings")
+                .document(GlobalVariable.getUserInfo().getUid())
+                .set(ratingData)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Toast.makeText(view.getContext(), "Đánh giá thành công", Toast.LENGTH_SHORT).show();
+                        productDetailRatingBarText.setText(ratingData.getRating() + "/5");
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(view.getContext(), "Đánh giá thất bại", Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     private final OnBackPressedCallback onBackPressedProductDetailCallback = new OnBackPressedCallback(true) {
