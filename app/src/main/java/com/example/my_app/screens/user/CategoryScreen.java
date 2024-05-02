@@ -35,7 +35,7 @@ public class CategoryScreen extends Fragment {
     private RecyclerView categoryList;
     private ImageView noProductFound;
     private ProgressBar progressBar;
-    private List<Category> categories = new ArrayList<>();
+    private List<Category> categories;
 
     public CategoryScreen() {
     }
@@ -61,6 +61,7 @@ public class CategoryScreen extends Fragment {
     }
 
     private void setEvent(View view) {
+        categories = new ArrayList<>();
         getCategoriesData(view);
 
         GridLayoutManager categoryLayoutManager = new GridLayoutManager(view.getContext(), 4);
@@ -85,9 +86,6 @@ public class CategoryScreen extends Fragment {
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         if (!queryDocumentSnapshots.isEmpty()) {
                             List<DocumentSnapshot> categoriesDocs = queryDocumentSnapshots.getDocuments();
-
-                            if (!categories.isEmpty())
-                                categories.clear();
 
                             for (DocumentSnapshot category : categoriesDocs) {
                                 Category item = category.toObject(Category.class);

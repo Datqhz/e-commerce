@@ -4,14 +4,16 @@ public class Address {
     private String addressId;
     private String uid;
     private String address;
+    private boolean isDefault;
 
     public Address() {
     }
 
-    public Address(String addressId, String uid, String address) {
+    public Address(String addressId, String uid, String address, boolean isDefault) {
         this.addressId = addressId;
         this.uid = uid;
         this.address = address;
+        this.isDefault = isDefault;
     }
 
     public String getAddressId() {
@@ -36,5 +38,13 @@ public class Address {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public boolean isDefault() {
+        return isDefault;
+    }
+
+    public void setDefault(boolean aDefault) {
+        isDefault = aDefault;
     }
 }
