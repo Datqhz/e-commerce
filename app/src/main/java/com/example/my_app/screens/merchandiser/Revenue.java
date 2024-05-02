@@ -274,8 +274,6 @@ public class Revenue extends AppCompatActivity {
 
                                                                         }
 
-                                                                        uniqueQuantity = nameAndTotalQuantity;
-                                                                        uniqueAvenue = nameAndTotalAvenue;
 
                                                                     }
                                                                 });
@@ -284,9 +282,7 @@ public class Revenue extends AppCompatActivity {
                                                     }
                                                 }
 
-                                                uniqueQuantity = nameAndTotalQuantity;
-                                                uniqueAvenue = nameAndTotalAvenue;
-//
+
                                             }
                                         });
 
@@ -294,8 +290,6 @@ public class Revenue extends AppCompatActivity {
                             }
                         }
 
-                        uniqueQuantity = nameAndTotalQuantity;
-                        uniqueAvenue = nameAndTotalAvenue;
 
                     }
                 });
