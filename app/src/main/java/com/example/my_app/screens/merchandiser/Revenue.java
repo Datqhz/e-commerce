@@ -68,14 +68,14 @@ public class Revenue extends AppCompatActivity {
     private FirebaseFirestore db;
     private Map<Integer, Integer> monthlyRevenueMap;
     private Map<String, Integer> nameAndTotalQuantity;
-    private Map<String, Integer> nameAndTotalAvenue;
+    private Map<String, Integer> nameAndTotalRevenue;
     private Map<String, Integer> uniqueQuantity= new HashMap<>();
-    private Map<String, Integer> uniqueAvenue = new HashMap<>();
+    private Map<String, Integer> uniqueRevenue = new HashMap<>();
 
     EditText edtYear;
     Button btnSearchYear, btnExport;
     TextView tvRevenue, tvVND, tvTitle;
-    TableLayout tlAvenue;
+    TableLayout tlRevenue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,12 +98,10 @@ public class Revenue extends AppCompatActivity {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
             }
-
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
             }
-
             @Override
             public void afterTextChanged(Editable s) {
                 if (!TextUtils.isEmpty(s)) {
@@ -140,29 +138,29 @@ public class Revenue extends AppCompatActivity {
         btnSearchYear = findViewById(R.id.btnSearchYear);
         tvRevenue = findViewById(R.id.tvRevenue);
         tvVND = findViewById(R.id.tvVND);
-        tlAvenue = findViewById(R.id.tlAvenue);
+        tlRevenue = findViewById(R.id.tlRevenue);
         tvTitle = findViewById(R.id.tvTitle);
     }
 
     private void calculateAndDrawRevenue() {
-        // Lấy thời gian hiện tại để tính thống kê theo tháng
-        Calendar calendar = Calendar.getInstance();
-        int currentMonth = calendar.get(Calendar.MONTH) + 1; // Tháng tính từ 0 đến 11, cần cộng 1 để lấy tháng hiện tại
-
         // Map để lưu tổng doanh thu của mỗi tháng
         monthlyRevenueMap = new HashMap<>();
+        //Gán giá trị ban đầu
         for (int month = 1; month <= 12; month++) {
             monthlyRevenueMap.put(month, 0);
-
         }
+
+        //Khởi tạo biến totalRevenue để lưu lại tổng doanh thu trong năm được lấy từ edtYear
         final int[] totalRevenue = {0};
 
+        //Su dụng map để lưu <tên sản phẩm, tổng số lượng đã bán>, <tên sản phẩm, tổng doanh thu từ sp đó
         nameAndTotalQuantity = new HashMap<>();
-        nameAndTotalAvenue = new HashMap<>();
+        nameAndTotalRevenue = new HashMap<>();
 
         // Truy vấn tất cả các sản phẩm mà mechandiser bán
+        // Chỉ lấy các sản phẩm đang bán của uid người bán đang đăng nhập
         db.collection("products")
-                .whereEqualTo("uid", GlobalVariable.userInfo.getUid()) // Chỉ lấy các sản phẩm đang bán của uid hiện tại
+                .whereEqualTo("uid", GlobalVariable.userInfo.getUid())
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
@@ -170,8 +168,6 @@ public class Revenue extends AppCompatActivity {
                         if (!productQueryDocumentSnapshots.isEmpty()) {
                             // Lặp qua từng sản phẩm mà merchandiser đang bán
                             for (QueryDocumentSnapshot productSnapshot : productQueryDocumentSnapshots) {
-                                //System.out.println(productSnapshot.getId());
-
                                 // truy vấn chi tiết đơn đặt hàng
                                 // Lấy các đơn đặt hàng có các sản phẩm mà merchandiser đang bán
                                 db.collection("order_detail")
@@ -242,17 +238,17 @@ public class Revenue extends AppCompatActivity {
                                                                                                     if (!nameAndTotalQuantity.containsKey(newKey)) {
                                                                                                         // Nếu khóa không tồn tại trong Map, thêm khóa mới với giá trị quantity
                                                                                                         nameAndTotalQuantity.put(newKey, quantity);
-                                                                                                        nameAndTotalAvenue.put(newKey, price * quantity);
+                                                                                                        nameAndTotalRevenue.put(newKey, price * quantity);
                                                                                                     } else {
                                                                                                         // Nếu khóa đã tồn tại trong Map, không thực hiện ghi đè giá trị
-                                                                                                        // Cập nhật tổng doanh thu của tháng
+                                                                                                        // Cập nhật tổng doanh thu của sản pham
                                                                                                         int tempQuantity = nameAndTotalQuantity.getOrDefault(newKey, 0);
                                                                                                         tempQuantity += quantity;
                                                                                                         nameAndTotalQuantity.put(newKey, tempQuantity);
 
-                                                                                                        int tempAvenue = nameAndTotalAvenue.getOrDefault(newKey, 0);
-                                                                                                        tempAvenue += price * quantity;
-                                                                                                        nameAndTotalAvenue.put(newKey, tempAvenue);
+                                                                                                        int tempRevenue = nameAndTotalRevenue.getOrDefault(newKey, 0);
+                                                                                                        tempRevenue += price * quantity;
+                                                                                                        nameAndTotalRevenue.put(newKey, tempRevenue);
                                                                                                     }
 
                                                                                                 }
@@ -266,7 +262,7 @@ public class Revenue extends AppCompatActivity {
                                                                                             tvRevenue.setText(formatter.format(totalRevenue[0]));
 
                                                                                             uniqueQuantity = nameAndTotalQuantity;
-                                                                                            uniqueAvenue = nameAndTotalAvenue;
+                                                                                            uniqueRevenue = nameAndTotalRevenue;
 
 
                                                                                         }
@@ -300,15 +296,15 @@ public class Revenue extends AppCompatActivity {
 //            Toast.makeText(this, "No Data !!! :(", Toast.LENGTH_SHORT).show();
 //        }
 
-        drawTable(uniqueQuantity, uniqueAvenue);
-        tlAvenue.setPadding(8,8,8,8);
+        drawTable(uniqueQuantity, uniqueRevenue);
+        tlRevenue.setPadding(8,8,8,8);
         tvTitle.setText("Bảng: Top 5 sản phẩm có doanh thu cao nhất năm "+edtYear.getText().toString());
 
     }
 
-    private void drawTable(Map<String, Integer> uniqueQuantity, Map<String, Integer> uniqueAvenue) {
+    private void drawTable(Map<String, Integer> uniqueQuantity, Map<String, Integer> uniqueRevenue) {
         // Chuyển Map thành một danh sách các phần tử (entries)
-        List<Map.Entry<String, Integer>> entries = new ArrayList<>(uniqueAvenue.entrySet());
+        List<Map.Entry<String, Integer>> entries = new ArrayList<>(uniqueRevenue.entrySet());
 
         // Sắp xếp danh sách các phần tử theo giá trị giảm dần
         Collections.sort(entries, new Comparator<Map.Entry<String, Integer>>() {
@@ -320,16 +316,16 @@ public class Revenue extends AppCompatActivity {
         });
 
         // Tạo một Map mới để lưu trữ các phần tử đã sắp xếp
-        Map<String, Integer> sortedMapAvenue = new LinkedHashMap<>();
+        Map<String, Integer> sortedMapRevenue = new LinkedHashMap<>();
         for (Map.Entry<String, Integer> entry : entries) {
-            sortedMapAvenue.put(entry.getKey(), entry.getValue());
+            sortedMapRevenue.put(entry.getKey(), entry.getValue());
         }
-        // Bây giờ sortedMap chứa các phần tử của uniqueAvenue được sắp xếp theo giá trị giảm dần
+        // Bây giờ sortedMap chứa các phần tử của uniqueRevenue được sắp xếp theo giá trị giảm dần
 
         // Xóa tất cả các TableRow hiện có khỏi TableLayout, đỡ trùng lặp dữ liệu
-        tlAvenue.removeAllViews();
+        tlRevenue.removeAllViews();
         int count = 0; // Biến đếm số lượng phần tử đã in ra
-        for (Map.Entry<String, Integer> entry : sortedMapAvenue.entrySet()) {
+        for (Map.Entry<String, Integer> entry : sortedMapRevenue.entrySet()) {
             if (count < 5) {
                 String sortedKey = entry.getKey();
                 Integer sortedValue2 = entry.getValue();
@@ -365,7 +361,7 @@ public class Revenue extends AppCompatActivity {
                 row.addView(tvRevenueSP);
 
                 // Thêm TableRow mới vào TableLayout
-                tlAvenue.addView(row);
+                tlRevenue.addView(row);
 
             } else {
                 break; // Thoát khỏi vòng lặp nếu đã in ra 5 phần tử
