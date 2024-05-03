@@ -58,7 +58,8 @@ public class ProfileScreen extends Fragment {
         llMyOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent intent = new Intent(getContext(), UserOrderManagement.class);
+                startActivity(intent);
             }
         });
         llUpdateInfo.setOnClickListener(new View.OnClickListener() {

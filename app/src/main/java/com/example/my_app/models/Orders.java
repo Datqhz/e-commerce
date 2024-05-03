@@ -1,8 +1,9 @@
 package com.example.my_app.models;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Orders {
+public class Orders implements Serializable {
     private String orderId;
     private Date createDate;
     private String address;

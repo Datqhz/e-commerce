@@ -35,7 +35,6 @@ android {
 dependencies {
 
     implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'com.google.android.material:material:1.5.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.navigation:navigation-fragment:2.7.6'
     implementation 'androidx.navigation:navigation-ui:2.7.6'
@@ -64,4 +63,5 @@ dependencies {
 
     implementation 'com.github.denzcoskun:ImageSlideshow:0.1.2'
     implementation 'com.google.android.flexbox:flexbox:3.0.0'
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 }
