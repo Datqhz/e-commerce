@@ -63,6 +63,7 @@ public class PaymentScreen extends Fragment {
     private TextView paymentButton;
     private TextView totalPrice, totalPayment, totalPaymentFinal, userNumber, userName, userAddress;
     private LinearLayout addressContainer;
+    private String currentAddress = "address";
 
     public PaymentScreen() {
     }
@@ -166,7 +167,7 @@ public class PaymentScreen extends Fragment {
                     Orders data = new Orders();
                     data.setOrderId(newOrderRef.getId());
                     data.setCreateDate(new Date());
-                    data.setAddress("address");
+                    data.setAddress(currentAddress);
                     data.setUid(GlobalVariable.userInfo.getUid());
 
                     newOrderRef.set(data).addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -292,8 +293,10 @@ public class PaymentScreen extends Fragment {
                             List<DocumentSnapshot> addressDocs = queryDocumentSnapshots.getDocuments();
                             for (DocumentSnapshot document : addressDocs) {
                                 Address address = document.toObject(Address.class);
-                                if (address.isDefault())
-                                    userAddress.setText(address.getAddress());
+                                if (address.isDefault()) {
+                                    currentAddress = address.getAddress();
+                                    userAddress.setText(currentAddress);
+                                }
                             }
                         }
                     }
