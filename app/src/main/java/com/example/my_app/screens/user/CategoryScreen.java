@@ -67,7 +67,8 @@ public class CategoryScreen extends Fragment {
         GridLayoutManager categoryLayoutManager = new GridLayoutManager(view.getContext(), 4);
         categoryList.setLayoutManager(categoryLayoutManager);
 
-        adapter = new BuyerCategoryAdapter(categories, view.getContext(), new BuyerCategoryAdapter.OnCategoryClickedListener() {
+        adapter = new BuyerCategoryAdapter(categories, view.getContext(),
+                new BuyerCategoryAdapter.OnCategoryClickedListener() {
             @Override
             public void onCategoryClick(Category category) {
                 Intent intent = new Intent(view.getContext(), ProductByCategory.class);

@@ -201,7 +201,7 @@ public class PaymentScreen extends Fragment {
                                 OrderDetail newOrderDetail = new OrderDetail();
                                 newOrderDetail.setOrderId(newOrderRef.getId());
                                 newOrderDetail.setProductId(product.getProductId());
-                                newOrderDetail.setPrice(paymentPriceString);
+                                newOrderDetail.setPrice(product.getPrice());
                                 newOrderDetail.setQuantity(quantity);
                                 db.collection("order_detail").add(newOrderDetail).addOnFailureListener(new OnFailureListener() {
                                     @Override
