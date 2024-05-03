@@ -93,6 +93,18 @@ public class RegisterScreen extends AppCompatActivity {
                     }
                     edtUsername.setFocusable(true);
                     canNext = false;
+                }else {
+                    if(isPhone){
+                        if(!isValidPhoneNumber(edtUsername.getText().toString().trim())){
+                            edtUsername.setError("Số điện thoại không hợp lệ!");
+                            canNext = false;
+                        }
+                    }else {
+                        if(!isValidEmail(edtUsername.getText().toString().trim())){
+                            edtUsername.setError("Email không hợp lệ!");
+                            canNext = false;
+                        }
+                    }
                 }
                 if(edtPassword.getText().toString().trim().equals("")){
                     edtPassword.setError("Vui lòng nhập mật khẩu!");
@@ -124,6 +136,15 @@ public class RegisterScreen extends AppCompatActivity {
                 }
             }
         });
+    }
+    private boolean isValidPhoneNumber(String phoneNumber) {
+        // Match a number with optional '-' and decimal
+        String regex = "^\\d{10}$"; // For ten-digit numbers
+        return phoneNumber.matches(regex);
+    }
+    private boolean isValidEmail(String email) {
+        String regex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
+        return email.matches(regex);
     }
 
     private void verifyEmail(UserInfo user, FirebaseAuth auth){

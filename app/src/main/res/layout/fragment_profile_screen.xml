@@ -255,4 +255,28 @@
                 android:textSize="11dp"/>
         </LinearLayout>
     </LinearLayout>
+    <LinearLayout
+        android:id="@+id/Profile_llLogout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="12dp"
+        android:paddingVertical="8dp"
+        android:background="@drawable/bottom_border"
+        android:orientation="horizontal">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_marginLeft="12dp"
+                android:layout_height="wrap_content"
+                android:text="Đăng xuất"
+                android:textColor="@color/red"
+                android:fontFamily="@font/roboto_regular"
+                android:textSize="13dp"/>
+        </LinearLayout>
+    </LinearLayout>
 </LinearLayout>

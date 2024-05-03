@@ -19,13 +19,15 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.my_app.R;
+import com.example.my_app.screens.authenticate.MainActivity;
 import com.example.my_app.shared.GlobalVariable;
+import com.google.firebase.auth.FirebaseAuth;
 
 
 public class ProfileScreen extends Fragment {
 
     ImageView ivAvatar;
-    LinearLayout llMyOrder, llUpdateInfo, llChangePassword, llOrderPending, llOrderDelivery, llOrderComplete, llOrderCancel;
+    LinearLayout llMyOrder, llUpdateInfo, llChangePassword, llOrderPending, llOrderDelivery, llOrderComplete, llOrderCancel, llLogout;
     TextView tvDisplayName;
 
     @Override
@@ -50,6 +52,7 @@ public class ProfileScreen extends Fragment {
         llOrderComplete= view.findViewById(R.id.Profile_llOrderComplete);
         llOrderCancel= view.findViewById(R.id.Profile_llOrderCancel);
         tvDisplayName = view.findViewById(R.id.Profile_tvDisplayName);
+        llLogout = view.findViewById(R.id.Profile_llLogout);
     }
     private void setEvent(View view){
         RequestOptions requestOptions = new RequestOptions().transform(new CircleCrop());
@@ -100,6 +103,14 @@ public class ProfileScreen extends Fragment {
             @Override
             public void onClick(View view) {
 
+            }
+        });
+        llLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FirebaseAuth.getInstance().signOut();
+                Intent intent = new Intent(getContext(), MainActivity.class);
+                startActivity(intent);
             }
         });
     }
