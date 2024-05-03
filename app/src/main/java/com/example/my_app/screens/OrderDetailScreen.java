@@ -7,6 +7,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.my_app.R;
@@ -24,10 +27,13 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 
 public class OrderDetailScreen extends AppCompatActivity {
 
@@ -37,7 +43,7 @@ public class OrderDetailScreen extends AppCompatActivity {
     ProductOrderAdapter adapter;
     private List<OrderDetail> orderDetailList = new ArrayList<>();
     FirebaseFirestore db = FirebaseFirestore.getInstance();
-
+    ImageButton btnPrevious;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +56,7 @@ public class OrderDetailScreen extends AppCompatActivity {
         edtStatus = findViewById(R.id.statusName);
         edtshopName = findViewById(R.id.shopName1);
         edtTotal = findViewById(R.id.totalPrice1);
+        btnPrevious = findViewById(R.id.btnPrevious);
         listOrderDetail = findViewById(R.id.allProduct);
         Intent intent = getIntent();
         order = (Orders) intent.getSerializableExtra("order");
@@ -57,17 +64,32 @@ public class OrderDetailScreen extends AppCompatActivity {
     }
 
     private void setEvent(){
+        btnPrevious.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         listOrderDetail.setAdapter(adapter);
         listOrderDetail.setLayoutManager(new LinearLayoutManager(this));
         db.collection("order_detail").whereEqualTo("orderId",order.getOrderId()).addSnapshotListener(new EventListener<QuerySnapshot>(){
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                 orderDetailList.clear();
+                double total = 0;
+                NumberFormat formatter = NumberFormat.getNumberInstance(new Locale("vi", "VN"));
                 for(QueryDocumentSnapshot doc : value){
                     OrderDetail detail = doc.toObject(OrderDetail.class);
                     orderDetailList.add(detail);
+                    try {
+                        Number number = formatter.parse(detail.getPrice());
+                        int num = number.intValue();
+                        total+= detail.getQuantity()*num;
+                    } catch (ParseException e) {
+                        throw new RuntimeException(e);
+                    }
+                    edtTotal.setText("₫"+formatter.format(total));
                 }
-                System.out.println(orderDetailList.size());
                 adapter.notifyDataSetChanged();
                 //shop name
                 db.collection("products").whereEqualTo("productId", orderDetailList.get(0).getProductId()).addSnapshotListener(new EventListener<QuerySnapshot>() {

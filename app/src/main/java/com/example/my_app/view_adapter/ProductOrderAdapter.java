@@ -54,15 +54,14 @@ public class ProductOrderAdapter extends RecyclerView.Adapter<ProductOrderAdapte
 
         }
     });
-    String quant = String.valueOf(orderDetail.getQuantity());
-    double total = orderDetail.getQuantity()* Double.parseDouble(orderDetail.getPrice());
-        holder.price.setText("₫" + String.valueOf(total));
+        String quant = String.valueOf(orderDetail.getQuantity());
+        holder.price.setText("₫" + orderDetail.getPrice());
         holder.quantity.setText("x"+ quant);
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return orderDetailList.size();
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder{

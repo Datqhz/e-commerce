@@ -163,7 +163,11 @@ public class ProductManagement extends AppCompatActivity {
             Intent intent = new Intent(ProductManagement.this, Revenue.class);
             startActivity(intent);
             return true;
-        }
+        }else  if(itemid == R.id.menu_item_orderManagement){
+        Intent intent = new Intent(ProductManagement.this, MerOrderManagement.class);
+        startActivity(intent);
+        return true;
+    }
         return super.onOptionsItemSelected(item);
     }
 

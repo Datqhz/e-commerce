@@ -27,6 +27,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.my_app.R;
+import com.example.my_app.shared.GlobalVariable;
 import com.example.my_app.view_adapter.ProductAdapterImage;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -78,7 +79,7 @@ public class EditProduct extends AppCompatActivity {
                 if(o.getData() != null && o.getData().getClipData() != null){
                     int count = o.getData().getClipData().getItemCount();
                     for(int i = 0; i < count; i++){
-                        if(uriArrayList.size() < 10){
+                        if(uriArrayList.size() < 8){
                             countNew = countNew + 1;
                             imageUri = o.getData().getClipData().getItemAt(i).getUri();
 
@@ -91,7 +92,7 @@ public class EditProduct extends AppCompatActivity {
                     }
                     recyclerProductImage.notifyDataSetChanged();
                 } else if (o.getData().getData() != null) {
-                    if(uriArrayList.size() < 10){
+                    if(uriArrayList.size() < 8){
                         countNew = countNew + 1;
                         //imageUrl = o.getData().getData().getPath();
                         imageUri = o.getData().getData();
@@ -102,8 +103,6 @@ public class EditProduct extends AppCompatActivity {
                     }
                 }
                 recyclerProductImage.notifyDataSetChanged();
-            }else{
-                Toast.makeText(EditProduct.this, "Vui lòng chọn hình ảnh sản phẩm", Toast.LENGTH_LONG).show();
             }
         }
     });
@@ -161,7 +160,7 @@ public class EditProduct extends AppCompatActivity {
                 });
     }
     private void getProductName() {
-        firestore.collection("products")
+        firestore.collection("products").whereEqualTo("uid", GlobalVariable.userInfo.getUid())
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
@@ -272,7 +271,7 @@ public class EditProduct extends AppCompatActivity {
         String productName = (edtProductName.getText().toString().replaceAll("\\s+", " ")).trim().toLowerCase();
         Boolean canNext = true;
         if(uriArrayList == null ){
-            Toast.makeText(this, "Vui lòng chọn hình ảnh danh mục", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Vui lòng chọn hình ảnh sản phẩm", Toast.LENGTH_SHORT).show();
             canNext = false;
         }
         if (productName.equals("")) {
