@@ -153,6 +153,23 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:background="@color/white"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/edtDisCount"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginStart="18dp"
+                android:backgroundTint="@color/white"
+                android:fontFamily="@font/roboto_regular"
+                android:hint="Giảm giá"
+                android:inputType="number" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:background="@color/white"
             android:orientation="vertical">

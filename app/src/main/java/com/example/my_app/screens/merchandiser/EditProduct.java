@@ -63,7 +63,7 @@ public class EditProduct extends AppCompatActivity {
     private ProductAdapterImage recyclerProductImage;
     private ArrayList<String> listImageUrl;
     private ArrayList<String> listImageUrlDelete;
-    private EditText edtProductName, edtDesc, edtPrice, edtQuantity;
+    private EditText edtProductName, edtDesc, edtPrice, edtQuantity, edtDisCount;
     private ArrayList<String> categoryArrayList;
     private ArrayList<String> productNameList;
     private ArrayAdapter<String> adapter;
@@ -129,6 +129,7 @@ public class EditProduct extends AppCompatActivity {
         edtDesc = (EditText) findViewById(R.id.edtDesc);
         edtPrice = (EditText) findViewById(R.id.edtPrice);
         edtQuantity = (EditText) findViewById(R.id.edtQuantity);
+        edtDisCount = (EditText) findViewById(R.id.edtDisCount);
         spCategory = (Spinner) findViewById(R.id.spCategory);
 
         btnPickImages = (Button) findViewById(R.id.btnPickImages);
@@ -182,8 +183,8 @@ public class EditProduct extends AppCompatActivity {
             edtDesc.setText(bundle.getString("desc"));
             edtPrice.setText(bundle.getString("price"));
             String tempp = bundle.getString("quantity");
-
             edtQuantity.setText(tempp);
+            edtDisCount.setText(bundle.getString("disCount"));
             String temp = bundle.getString("category");
 //                for(int i = 0; i < categoryArrayList.size();i++){
 //                    if(categoryArrayList.get(i).equals(temp)){
@@ -302,6 +303,14 @@ public class EditProduct extends AppCompatActivity {
             edtQuantity.setFocusable(true);
             canNext = false;
         }
+        if(edtDisCount.getText().toString().trim().equals("")){
+            edtDisCount.setText("0");
+        }
+        if(Integer.parseInt(edtDisCount.getText().toString().trim()) > 100){
+            edtDisCount.setError(" Mã giảm giá không hợp lệ, Vui lòng nhập lại mã giảm giá tối đa 100!");
+            edtDisCount.setFocusable(true);
+            canNext = false;
+        }
         if(canNext) {
             final String randomName = UUID.randomUUID().toString();
             for (int i = uriArrayList.size() - countNew; i < uriArrayList.size(); i++) {
@@ -371,6 +380,7 @@ public class EditProduct extends AppCompatActivity {
         edited.put("listImageUrl", listImageUrl);
         edited.put("productId", productId);
         edited.put("uid", uid);
+        edited.put("disCount", Integer.parseInt(edtDisCount.getText().toString().trim()));
 
         firestore.collection("products").document(productId).update(edited).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
