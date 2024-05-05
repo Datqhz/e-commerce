@@ -258,6 +258,9 @@ public class AddProduct extends AppCompatActivity {
             edtQuantity.setFocusable(true);
             canNext = false;
         }
+        if(edtDisCount.getText().toString().trim().equals("")){
+            edtDisCount.setText("0");
+        }
         if(Integer.parseInt(edtDisCount.getText().toString().trim()) > 100){
             edtDisCount.setError(" Mã giảm giá không hợp lệ, Vui lòng nhập lại mã giảm giá tối đa 100!");
             edtDisCount.setFocusable(true);
