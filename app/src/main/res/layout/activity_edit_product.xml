@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="#EDEDED"
     android:fillViewport="true"
-    tools:context=".screens.merchandiser.AddProduct">
+    tools:context=".screens.merchandiser.EditProduct">
 
     <LinearLayout
         android:id="@+id/yourLinearLayout"
@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:background="@color/orange"
             android:minHeight="?attr/actionBarSize"
-            app:title="Thêm sản phẩm"
+            app:title="Chỉnh sửa sản phẩm"
             app:titleTextColor="@android:color/white" />
 
         <LinearLayout
@@ -148,6 +148,23 @@
                 android:backgroundTint="@color/white"
                 android:fontFamily="@font/roboto_regular"
                 android:hint="Số lượng"
+                android:inputType="number" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:background="@color/white"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/edtDisCount"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginStart="18dp"
+                android:backgroundTint="@color/white"
+                android:fontFamily="@font/roboto_regular"
+                android:hint="Giảm giá"
                 android:inputType="number" />
         </LinearLayout>
         <LinearLayout

@@ -67,7 +67,7 @@ public class AddProduct extends AppCompatActivity {
     private RecyclerView rvAddImage;
     private ProductAdapterImage productAdapterImage;
     private ArrayList<String> listImageUrl;
-    private EditText edtProductName, edtDesc, edtPrice, edtQuantity;
+    private EditText edtProductName, edtDesc, edtPrice, edtQuantity, edtDisCount;
     private ArrayList<String> categoryArrayList;
     private ArrayList<String> productNameList;
     private ArrayAdapter<String> adapter;
@@ -137,6 +137,7 @@ public class AddProduct extends AppCompatActivity {
         edtDesc = (EditText) findViewById(R.id.edtDesc);
         edtPrice = (EditText) findViewById(R.id.edtPrice);
         edtQuantity = (EditText) findViewById(R.id.edtQuantity);
+        edtDisCount = (EditText) findViewById(R.id.edtDisCount);
         spCategory = (Spinner) findViewById(R.id.spCategory);
 
 
@@ -257,6 +258,14 @@ public class AddProduct extends AppCompatActivity {
             edtQuantity.setFocusable(true);
             canNext = false;
         }
+        if(edtDisCount.getText().toString().trim().equals("")){
+            edtDisCount.setText("0");
+        }
+        if(Integer.parseInt(edtDisCount.getText().toString().trim()) > 100){
+            edtDisCount.setError(" Mã giảm giá không hợp lệ, Vui lòng nhập lại mã giảm giá tối đa 100!");
+            edtDisCount.setFocusable(true);
+            canNext = false;
+        }
         if (canNext) {
             final String randomName = UUID.randomUUID().toString();
             for (int i = 0; i < uriArrayList.size(); i++) {
@@ -310,6 +319,7 @@ public class AddProduct extends AppCompatActivity {
         product.setQuantity(Integer.parseInt(edtQuantity.getText().toString().trim()));
         product.setCategoryName(spCategory.getSelectedItem().toString());
         product.setUid(uid);
+        product.setDisCount(Integer.parseInt(edtDisCount.getText().toString().trim()));
 
         firestore.collection("products").add(product).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
             @Override
