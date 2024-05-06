@@ -66,12 +66,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
         holder.tvCategory.setText(sp.getCategoryName());
         holder.tvPrice.setText(sp.getPrice()+" đ");
         holder.tvQuantity.setText(sp.getQuantity() + " Sản phẩm");
-        int temp = sp.getDisCount();
-        if(temp == 0){
-            holder.tvDisCount.setText("");
-        }else{
-            holder.tvDisCount.setText("-"+sp.getDisCount() + "%");
-        }
         ArrayList<String> listImageUrl = sp.getListImageUrl();
         if (listImageUrl != null && listImageUrl.size() > 0) {
             String imageUrl = listImageUrl.get(0);
@@ -90,7 +84,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
                 intent.putExtra("quantity", Integer.toString(productArrayList.get(holder.getAbsoluteAdapterPosition()).getQuantity()));
                 intent.putExtra("productId", productArrayList.get(holder.getAbsoluteAdapterPosition()).getProductId());
                 intent.putExtra("uid", productArrayList.get(holder.getAbsoluteAdapterPosition()).getUid());
-                intent.putExtra("disCount", Integer.toString(productArrayList.get(holder.getAbsoluteAdapterPosition()).getDisCount()));
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
             }
@@ -149,12 +142,11 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
     public static class MyViewHolder extends RecyclerView.ViewHolder{
         // intialize objects
         private ImageView imageView, ivEdit, ivdDelete;
-        private TextView tvProductName, tvCategory, tvPrice, tvQuantity, tvDisCount;
+        private TextView tvProductName, tvCategory, tvPrice, tvQuantity;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             tvProductName = itemView.findViewById(R.id.tvProductName);
             tvCategory = itemView.findViewById(R.id.tvCategory);
-            tvDisCount = itemView.findViewById(R.id.tvDisCount);
             tvPrice = itemView.findViewById(R.id.tvPrice);
             tvQuantity = itemView.findViewById(R.id.tvQuantity);
             imageView = itemView.findViewById(R.id.imageView);
