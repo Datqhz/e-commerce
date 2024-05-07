@@ -6,6 +6,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.View;
+import android.widget.ImageView;
 
 import com.example.my_app.R;
 import com.example.my_app.models.DSDetail;
@@ -30,7 +32,7 @@ public class UserOrderManagement extends AppCompatActivity {
 
     TabLayout tlTabs;
     RecyclerView rvOrderList;
-
+    ImageView backBtn;
     UserOrderAdapter adapter;
     List<Orders> userOrders;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -51,9 +53,15 @@ public class UserOrderManagement extends AppCompatActivity {
         tlTabs.addTab(tlTabs.newTab().setText("Đã giao"));
         tlTabs.addTab(tlTabs.newTab().setText("Đã hủy"));
         rvOrderList = findViewById(R.id.rvOrderList);
-
+        backBtn = findViewById(R.id.btnPrevious);
     }
     private void setEvent(){
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
         tlTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
