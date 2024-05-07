@@ -33,9 +33,6 @@ public class MerOrderManagement extends AppCompatActivity {
         setContentView(R.layout.activity_mer_order_management);
 
         ImageView icon_left = findViewById(R.id.icon_left);
-        ImageView icon_searching = findViewById(R.id.icon_searching);
-//        ImageView icon_right = findViewById(R.id.icon_right);
-        TextView toolbar_text = findViewById(R.id.toolbar_text);
         mTabLayout = findViewById(R.id.tab_layout);
 
 
@@ -47,7 +44,6 @@ public class MerOrderManagement extends AppCompatActivity {
                 Fragment fragment = null;
                 if(tab.getPosition() == 0){
                     fragment = new ChoXacNhanFragment();
-
                 }else if(tab.getPosition() == 1){
                     fragment = new DangGiaoFragment();
                 }else if(tab.getPosition() == 2){
@@ -79,19 +75,8 @@ public class MerOrderManagement extends AppCompatActivity {
             }
         });
 
-//        icon_right.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Toast.makeText(MainActivity.this, "Information", Toast.LENGTH_SHORT).show();
-//            }
-//        });
 
-        icon_searching.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(MerOrderManagement.this, "Searching", Toast.LENGTH_SHORT).show();
-            }
-        });
+
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());

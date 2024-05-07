@@ -100,4 +100,5 @@ public class Product implements Serializable {
     public void setRatings(List<Rating> ratings) {
         this.ratings = ratings;
     }
+
 }

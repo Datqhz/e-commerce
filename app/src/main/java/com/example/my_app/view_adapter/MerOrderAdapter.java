@@ -61,14 +61,14 @@ public class MerOrderAdapter extends RecyclerView.Adapter<MerOrderAdapter.MyView
 
     @NonNull
     @Override
-    public MerOrderAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         View view = LayoutInflater.from(context).inflate(R.layout.order_item, parent, false);
         return new MyViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MerOrderAdapter.MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         if(GlobalVariable.userInfo.getRoleId().equals("49dczCwVNYLoChrME3nD")){
             holder.btnNextUp.setVisibility(View.GONE);
         }
@@ -163,6 +163,7 @@ public class MerOrderAdapter extends RecyclerView.Adapter<MerOrderAdapter.MyView
                 }else if(temp.get(0).getStatusId().equals("IWjbS9pxytwmbyxRXcNi")){//dagiao
                     holder.btnNextUp.setText("Đánh giá");
                     holder.tvStatus.setText("Đơn hàng đã giao thành công");
+                    holder.btnNextUp.setVisibility(View.GONE);
                 }else {
                     holder.tvStatus.setText("Đơn hàng đang trên đường đến bạn");
                 }

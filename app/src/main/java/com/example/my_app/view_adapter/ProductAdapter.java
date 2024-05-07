@@ -66,7 +66,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
         holder.tvCategory.setText(sp.getCategoryName());
         holder.tvPrice.setText(sp.getPrice()+" đ");
         holder.tvQuantity.setText(sp.getQuantity() + " Sản phẩm");
-
         ArrayList<String> listImageUrl = sp.getListImageUrl();
         if (listImageUrl != null && listImageUrl.size() > 0) {
             String imageUrl = listImageUrl.get(0);

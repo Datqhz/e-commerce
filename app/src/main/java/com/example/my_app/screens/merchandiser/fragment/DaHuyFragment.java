@@ -17,6 +17,7 @@ import com.example.my_app.R;
 import com.example.my_app.models.DSDetail;
 import com.example.my_app.models.OrderDetail;
 import com.example.my_app.models.Orders;
+import com.example.my_app.models.Product;
 import com.example.my_app.shared.GlobalVariable;
 import com.example.my_app.view_adapter.MerOrderAdapter;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -56,70 +57,86 @@ public class DaHuyFragment extends Fragment {
 
     public void getOrdersList(){
         List<String> orderOfShop = new ArrayList<>();
+        // query to get all order_detail
         db.collection("order_detail").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 List<OrderDetail> temp = new ArrayList<>();
-                for (QueryDocumentSnapshot doc: queryDocumentSnapshots){
+                List<DocumentSnapshot> list = queryDocumentSnapshots.getDocuments();
+                // map order detail to OrderDetail class and add it into temp List
+                for (int i = 0; i < list.size(); i++) {
+                    DocumentSnapshot doc = list.get(i);
                     temp.add(doc.toObject(OrderDetail.class));
-                }
-                for(OrderDetail dt : temp){
-                    db.collection("products").document(dt.getProductId()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                        @Override
-                        public void onSuccess(DocumentSnapshot documentSnapshot) {
-                            String uid = documentSnapshot.getString("uid");
-                            assert uid != null;
-                            if(uid.equals(GlobalVariable.userInfo.getUid())){
-                                if(!orderOfShop.contains(dt.getOrderId())){
-                                    orderOfShop.add(dt.getOrderId());
-                                    System.out.println("add order id" + dt.getOrderId());
-                                }
-                            }
-                            if (temp.indexOf(dt) == temp.size()-1){
-                                db.collection("orders").whereIn("orderId", orderOfShop).addSnapshotListener(new EventListener<QuerySnapshot>() {
-                                    @Override
-                                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                                        orderList.clear();
-                                        for (QueryDocumentSnapshot doc: value){
-                                            System.out.println(doc.getData());
-                                            Orders orders = new Orders();
-                                            orders.setOrderId(doc.getData().get("orderId").toString());
-                                            orders.setUid(doc.getData().get("uid").toString());
-                                            orders.setAddress(doc.getData().get("address").toString());
-                                            Timestamp timestamp = doc.getTimestamp("createDate");
-                                            if (timestamp != null) {
-                                                // Chuyển đổi Timestamp thành java.util.Date
-                                                Date date = timestamp.toDate();
-                                                orders.setCreateDate(date);
-//                    System.out.println("add");
-                                                orderList.add(orders);
-                                                System.out.println(orders.toString());
-                                            }
+                    if (i == list.size() - 1) {
+                        // for-loop to find product information of order detail
+                        for(OrderDetail dt : temp){
+                            db.collection("products").document(dt.getProductId()).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                                @Override
+                                public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                                    Product product = value.toObject(Product.class);
+                                    //check if product belongs to the shop has uid is GlobalVariable.userInfo.getUid()
+                                    // -> add order id to orderOfShop if it doesn't exits in this list
+                                    if(product.getUid().equals(GlobalVariable.userInfo.getUid())){
+                                        if(!orderOfShop.contains(dt.getOrderId())){
+                                            orderOfShop.add(dt.getOrderId());
                                         }
-                                        myAdapter.notifyDataSetChanged();
-                                        getOrderPending();
                                     }
-                                });
-                            }
-                        }
-                    });
+                                    // if "dt" is the end of items in temp,
+                                    // query to orders collection to get all order has orderId is in "orderOfShop" list
+                                    if (temp.indexOf(dt) == temp.size()-1){
+                                        // if shop has order -> get order information
+                                        if(orderOfShop.size()>0){
+                                            db.collection("orders").whereIn("orderId", orderOfShop).addSnapshotListener(new EventListener<QuerySnapshot>() {
+                                                @Override
+                                                public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                                                    // clear all items in orderList
+                                                    // and add new order satisfying condition (is in "orderOfShop:)
 
+                                                    orderList.clear();
+                                                    List<DocumentSnapshot> list = value.getDocuments();
+                                                    for (int i = 0; i < list.size(); i++) {
+                                                        DocumentSnapshot doc = list.get(i);
+                                                        Orders orders = new Orders();
+                                                        orders.setOrderId(doc.getData().get("orderId").toString());
+                                                        orders.setUid(doc.getData().get("uid").toString());
+                                                        orders.setAddress(doc.getData().get("address").toString());
+                                                        Timestamp timestamp = doc.getTimestamp("createDate");
+                                                        if (timestamp != null) {
+                                                            // Chuyển đổi Timestamp thành java.util.Date
+                                                            Date date = timestamp.toDate();
+                                                            orders.setCreateDate(date);
+                                                            orderList.add(orders);
+                                                        }
+                                                        //after all, call getOrderPending to do task.
+                                                        // in this case, orderPending will find orders with the newest ds_detail
+                                                        // having dsId of "rgNCIrNNoNaxothCyNe8"(da huy ;
+                                                        if(i == list.size()-1){
+                                                            getOrderCancel();
+                                                        }
+                                                    }
+
+                                                }
+                                            });
+
+                                        }
+                                    }
+                                }
+                            });
+                        }
+                    }
                 }
             }
         });
     }
-    public void getOrderPending(){
-        for (Orders order : orderList){
-            System.out.println("get ds_detail order id: " + order.getOrderId());
+    public void getOrderCancel() {
+        for (Orders order : orderList) {
             List<DSDetail> temp = new ArrayList<>();
             db.collection("ds_detail").whereEqualTo("orderId", order.getOrderId()).addSnapshotListener(new EventListener<QuerySnapshot>() {
                 @Override
                 public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                    for( QueryDocumentSnapshot doc: value){
-                        Log.d(TAG, "QueryDocumentSnapshot data: " + doc.getData());
+                    for (QueryDocumentSnapshot doc : value) {
                         DSDetail detail = doc.toObject(DSDetail.class);
                         temp.add(detail);
-                        System.out.println(detail.toString());
 
                     }
                     Collections.sort(temp, new Comparator<DSDetail>() {
@@ -128,12 +145,15 @@ public class DaHuyFragment extends Fragment {
                             return o2.getDateOfStatus().compareTo(o1.getDateOfStatus());
                         }
                     });
-                    if(!temp.get(0).getStatusId().equals("rgNCIrNNoNaxothCyNe8")){ /////chỉnh lại id status
+                    boolean flagEnd = orderList.indexOf(order) == orderList.size() - 1;
+                    if (!temp.get(0).getStatusId().equals("rgNCIrNNoNaxothCyNe8")) { // dahuy
                         orderList.remove(order);
+                    }
+                    if (flagEnd) {
+                        myAdapter.notifyDataSetChanged();
                     }
                 }
             });
         }
-        myAdapter.notifyDataSetChanged();
     }
 }

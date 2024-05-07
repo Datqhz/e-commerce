@@ -4,10 +4,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
-import android.widget.ImageView;
+
+import android.widget.ImageButton;
 
 import com.example.my_app.R;
 import com.example.my_app.models.DSDetail;
@@ -16,6 +18,7 @@ import com.example.my_app.shared.GlobalVariable;
 import com.example.my_app.view_adapter.UserOrderAdapter;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -32,9 +35,9 @@ public class UserOrderManagement extends AppCompatActivity {
 
     TabLayout tlTabs;
     RecyclerView rvOrderList;
-    ImageView backBtn;
     UserOrderAdapter adapter;
     List<Orders> userOrders;
+    ImageButton btnPrevious;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
@@ -43,8 +46,12 @@ public class UserOrderManagement extends AppCompatActivity {
         setContentView(R.layout.activity_user_order_management);
         setControl();
         setEvent();
-        tlTabs.getTabAt(1).select();
-        tlTabs.getTabAt(0).select();
+        Intent intent = getIntent();
+        int selectedTab = (int) intent.getSerializableExtra("tab");
+        if(selectedTab == 0) {
+            tlTabs.getTabAt(1).select();
+        }
+        tlTabs.getTabAt(selectedTab).select();
     }
     private void setControl(){
         tlTabs = findViewById(R.id.tlTabs);
@@ -53,15 +60,10 @@ public class UserOrderManagement extends AppCompatActivity {
         tlTabs.addTab(tlTabs.newTab().setText("Đã giao"));
         tlTabs.addTab(tlTabs.newTab().setText("Đã hủy"));
         rvOrderList = findViewById(R.id.rvOrderList);
-        backBtn = findViewById(R.id.btnPrevious);
+
+        btnPrevious = findViewById(R.id.btnPrevious);
     }
     private void setEvent(){
-        backBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
         tlTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -87,10 +89,15 @@ public class UserOrderManagement extends AppCompatActivity {
             }
         });
         userOrders = new ArrayList<>();
-        getAllOrder("IWjbS9pxytwmbyxRXcNi");
         adapter = new UserOrderAdapter(this, userOrders);
         rvOrderList.setAdapter(adapter);
         rvOrderList.setLayoutManager(new LinearLayoutManager(this));
+        btnPrevious.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
     }
 
     public void getAllOrder(String dsId){
@@ -98,7 +105,9 @@ public class UserOrderManagement extends AppCompatActivity {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                 userOrders.clear();
-                for (QueryDocumentSnapshot doc: value){
+                List<DocumentSnapshot> list = value.getDocuments();
+                for (int i = 0; i < list.size(); i++) {
+                    DocumentSnapshot doc = list.get(i);
                     Orders orders = new Orders();
                     orders.setOrderId(doc.getData().get("orderId").toString());
                     orders.setUid(doc.getData().get("uid").toString());
@@ -110,8 +119,10 @@ public class UserOrderManagement extends AppCompatActivity {
                         orders.setCreateDate(date);
                         userOrders.add(orders);
                     }
+                    if(i == list.size()-1){
+                        getOrderWithDSId(dsId);
+                    }
                 }
-                getOrderWithDSId(dsId);
             }
         });
     }
@@ -132,12 +143,16 @@ public class UserOrderManagement extends AppCompatActivity {
                             return o2.getDateOfStatus().compareTo(o1.getDateOfStatus());
                         }
                     });
+                    boolean flagEnd = userOrders.indexOf(order) == userOrders.size()-1;
                     if(!temp.get(0).getStatusId().equals(dsId)){
                         userOrders.remove(order);
+                    }
+                    if(flagEnd){
+                        adapter.notifyDataSetChanged();
                     }
                 }
             });
         }
-        adapter.notifyDataSetChanged();
+
     }
 }

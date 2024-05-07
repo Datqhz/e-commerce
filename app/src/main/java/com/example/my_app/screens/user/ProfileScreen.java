@@ -62,14 +62,13 @@ public class ProfileScreen extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getContext(), UserOrderManagement.class);
+                intent.putExtra("tab", 2);
                 startActivity(intent);
             }
         });
         llUpdateInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Intent intent = new Intent(getActivity(), UpdateUserInfo.class);
-//                startActivityForResult(intent, 1);
                 Intent intent = new Intent(getContext(), UpdateUserInfo.class);
                 startActivity(intent);
             }
@@ -84,25 +83,33 @@ public class ProfileScreen extends Fragment {
         llOrderPending.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent intent = new Intent(getContext(), UserOrderManagement.class);
+                intent.putExtra("tab", 0);
+                startActivity(intent);
             }
         });
         llOrderDelivery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent intent = new Intent(getContext(), UserOrderManagement.class);
+                intent.putExtra("tab", 1);
+                startActivity(intent);
             }
         });
         llOrderComplete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent intent = new Intent(getContext(), UserOrderManagement.class);
+                intent.putExtra("tab", 2);
+                startActivity(intent);
             }
         });
         llOrderCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent intent = new Intent(getContext(), UserOrderManagement.class);
+                intent.putExtra("tab", 3);
+                startActivity(intent);
             }
         });
         llLogout.setOnClickListener(new View.OnClickListener() {

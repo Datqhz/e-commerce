@@ -60,13 +60,13 @@ public class UserOrderAdapter extends RecyclerView.Adapter<UserOrderAdapter.MyVi
 
     @NonNull
     @Override
-    public UserOrderAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.order_item, parent, false);
         return new MyViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull UserOrderAdapter.MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         if(GlobalVariable.userInfo.getRoleId().equals("49dczCwVNYLoChrME3nD")){
             holder.btnNextUp.setVisibility(View.GONE);
         }
@@ -157,12 +157,15 @@ public class UserOrderAdapter extends RecyclerView.Adapter<UserOrderAdapter.MyVi
                     holder.tvStatus.setText("Đơn hàng đang chờ xác nhận");
                 }else if(temp.get(0).getStatusId().equals("rgNCIrNNoNaxothCyNe8")){ // da huy
                     holder.btnNextUp.setVisibility(View.GONE);
+                    holder.btnCancel.setVisibility(View.GONE);
                     holder.tvStatus.setText("Đơn hàng đã bị hủy");
                 }else if(temp.get(0).getStatusId().equals("IWjbS9pxytwmbyxRXcNi")){//dagiao
                     holder.btnNextUp.setText("Đánh giá");
                     holder.tvStatus.setText("Đơn hàng đã giao thành công");
+                    holder.btnCancel.setVisibility(View.GONE);
                 }else {
                     holder.tvStatus.setText("Đơn hàng đang trên đường đến bạn");
+                    holder.btnCancel.setVisibility(View.GONE);
                 }
                 holder.btnNextUp.setOnClickListener(new View.OnClickListener() {
                     @Override

@@ -60,6 +60,7 @@ public class CategoryManagement extends AppCompatActivity {
     private ArrayList<Category> categoryArrayList;
     private ArrayList<String> categoryNameList;
     private CategoryAdapter categoryAdapter;
+    private String categoryNameOld;
     private String categoryId;
     private Boolean isCreate = true;
     private Boolean checkChangeImage = true;
@@ -97,7 +98,9 @@ public class CategoryManagement extends AppCompatActivity {
         categoryAdapter = new CategoryAdapter(CategoryManagement.this, categoryArrayList, new CategoryAdapter.GetData() {
             @Override
             public void onItemClick(Category category) {
-                edtCategory.setText(category.getCategory().toString());
+                categoryNameOld = category.getCategory().toString();
+                edtCategory.setText(categoryNameOld);
+                System.out.println("0 " + edtCategory.getText().toString());
                 imageUrlOld = category.getImageUrl();
                 categoryId = category.getCategoryId();
                 imageUriOld = Uri.parse(imageUrlOld);
@@ -142,17 +145,58 @@ public class CategoryManagement extends AppCompatActivity {
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //uploadCategoryInfo();
-                uploadImage();
+                String category = (edtCategory.getText().toString().replaceAll("\\s+", " ")).trim().toLowerCase();
+                Boolean canNext = true;
+                if(imageUri == null ){
+                    Toast.makeText(CategoryManagement.this, "Vui lòng chọn hình ảnh danh mục", Toast.LENGTH_SHORT).show();
+                    canNext = false;
+                }
+                if (category.equals("")) {
+                    edtCategory.setError("Vui lòng nhập tên danh mục!");
+                    edtCategory.setFocusable(true);
+                    canNext = false;
+                }else{
+                    for(int i=0;i<categoryNameList.size();i++){
+                        if(category.equals(categoryNameList.get(i).toLowerCase())){
+                            edtCategory.setError("Tên danh mục đã tồn tại!");
+                            edtCategory.setFocusable(true);
+                            canNext = false;
+                        }
+                    }
+                }
+                if (canNext) {
+                    uploadImage();
+                }
             }
         });
         btnEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(checkChangeImage){
-                    updateCategory(imageUrlOld);
-                }else{
-                    uploadImage();
+                String category = (edtCategory.getText().toString().replaceAll("\\s+", " ")).trim().toLowerCase();
+                Boolean canNext = true;
+                if(imageUriOld == null ){
+                    Toast.makeText(CategoryManagement.this, "Vui lòng chọn hình ảnh danh mục", Toast.LENGTH_SHORT).show();
+                    canNext = false;
+                }
+                if (category.equals("")) {
+                    edtCategory.setError("Vui lòng nhập tên danh mục!");
+                    edtCategory.setFocusable(true);
+                    canNext = false;
+                }else if(!category.equals(categoryNameOld.toLowerCase())){
+                    for(int i=0;i<categoryNameList.size();i++){
+                        if(category.equals(categoryNameList.get(i).toLowerCase())){
+                            edtCategory.setError("Tên danh mục đã tồn tại!");
+                            edtCategory.setFocusable(true);
+                            canNext = false;
+                        }
+                    }
+                }
+                if (canNext) {
+                    if (checkChangeImage) {
+                        updateCategory(imageUrlOld);
+                    } else {
+                        uploadImage();
+                    }
                 }
             }
         });
@@ -177,26 +221,7 @@ public class CategoryManagement extends AppCompatActivity {
             }
     );
     private void uploadImage() {
-        String category = (edtCategory.getText().toString().replaceAll("\\s+", " ")).trim().toLowerCase();
-        Boolean canNext = true;
-        if(imageUri == null ){
-            Toast.makeText(this, "Vui lòng chọn hình ảnh danh mục", Toast.LENGTH_SHORT).show();
-            canNext = false;
-        }
-        if (category.equals("")) {
-            edtCategory.setError("Vui lòng nhập tên danh mục!");
-            edtCategory.setFocusable(true);
-            canNext = false;
-        }else{
-            for(int i=0;i<categoryNameList.size();i++){
-                if(category.equals(categoryNameList.get(i).toLowerCase())){
-                    edtCategory.setError("Tên danh mục đã tồn tại!");
-                    edtCategory.setFocusable(true);
-                    canNext = false;
-                }
-            }
-        }
-        if (canNext) {
+
             if(imageUri!=null){
                 final String randomName = UUID.randomUUID().toString();
                 byte[] bytes = new byte[0];
@@ -249,7 +274,7 @@ public class CategoryManagement extends AppCompatActivity {
                     }
                 });
             }
-        }
+
     }
     private void uploadCategoryInfo(String imageUrlNew) {
         DocumentReference documentReference = firestore.collection("categories").document();
