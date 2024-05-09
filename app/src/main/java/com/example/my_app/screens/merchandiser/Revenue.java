@@ -91,10 +91,7 @@ public class Revenue extends AppCompatActivity {
     private Map<Integer, Integer> monthlyRevenueMap;
     private Map<String, Integer> nameAndTotalQuantity;
     private Map<String, Integer> nameAndTotalRevenue;
-    private Map<Integer, Integer> savedmonthlyRevenue = new HashMap<>();
-    private Map<String, Integer> uniqueQuantity= new HashMap<>();
-    private Map<String, Integer> uniqueRevenue = new HashMap<>();
-
+    private boolean isSearched = false;
     private int totalRevenue2 = 0;
     EditText edtYear;
     Button btnSearchYear, btnExport;
@@ -111,22 +108,17 @@ public class Revenue extends AppCompatActivity {
 
         // Khởi tạo Firestore
         db = FirebaseFirestore.getInstance();
-//
-//        // lúc gộp code với nhóm mới sử dụng được code comment phía dưới
+
+        // lúc gộp code với nhóm mới sử dụng được code comment phía dưới
         uid = GlobalVariable.userInfo.getUid();
 //        uid = "lQxK1UIVefjhVDpNyA34";
-
-
 
         setControl();
         setEvent();
 
     }
 
-
     private void setEvent() {
-        //checkInputYear();
-
         btnSearchYear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -134,49 +126,48 @@ public class Revenue extends AppCompatActivity {
                     return;
                 }
 
-//                // Lấy trình quản lý bàn phím
-//                InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-//                // Ẩn bàn phím
-//                inputMethodManager.hideSoftInputFromWindow(edtYear.getWindowToken(), 0);
-//                // xử lý tính toán
+                // Lấy trình quản lý bàn phím
+                InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                // Ẩn bàn phím
+                inputMethodManager.hideSoftInputFromWindow(edtYear.getWindowToken(), 0);
+
+                // xử lý tính toán
                 calculateAndDrawRevenue();
 
-                for (Map.Entry<Integer, Integer> entry : savedmonthlyRevenue.entrySet()) {
-                    System.out.println(entry.getKey()+"   "+ entry.getValue());
-                }
-                for (Map.Entry<String, Integer> entry : uniqueRevenue.entrySet()) {
-                    String key = entry.getKey();
-                    Integer value = entry.getValue();
-                    System.out.println("Key: " + key + ", Value: " + value);
-                }
-                drawTable(uniqueQuantity, uniqueRevenue);
-
-                btnExport.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if(!validYear()){
-                            return;
-                        }
-                        // Lấy trình quản lý bàn phím
-                        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                        // Ẩn bàn phím
-                        inputMethodManager.hideSoftInputFromWindow(edtYear.getWindowToken(), 0);
-                        // xử lý tính toán
-                        if(totalRevenue2==0){
-                            Toast.makeText(Revenue.this, "No data", Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-
-                        try {
-                            createPdf();
-                        } catch (FileNotFoundException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
-
+                // Đã tìm kiếm, đặt cờ là true
+                isSearched = true;
             }
 
+        });
+
+        btnExport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!validYear()){
+                    return;
+                }
+                // Lấy trình quản lý bàn phím
+                InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                // Ẩn bàn phím
+                inputMethodManager.hideSoftInputFromWindow(edtYear.getWindowToken(), 0);
+
+                // Kiểm tra xem đã tìm kiếm trước đó hay chưa
+                if (!isSearched) {
+                    Toast.makeText(Revenue.this, "You haven't searched yet", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                // Check xem năm đó có doanh thu hay không
+                if(totalRevenue2==0){
+                    Toast.makeText(Revenue.this, "No data", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                try {
+                    createPdf();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
         });
 
     }
@@ -203,43 +194,7 @@ public class Revenue extends AppCompatActivity {
         return true;
     }
 
-//      //xét từng ký tự vừa mới nhập vào edtyear có hợp lệ không
-//    private void checkInputYear() {
-//        edtYear.addTextChangedListener(new TextWatcher() {
-//            @Override
-//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//
-//            }
-//            @Override
-//            public void onTextChanged(CharSequence s, int start, int before, int count) {
-//
-//            }
-//            @Override
-//            public void afterTextChanged(Editable s) {
-//                if (!TextUtils.isEmpty(s)) {
-//                    try {
-//                        int year = Integer.parseInt(s.toString());
-//                        // Nếu năm >=2000 và không lớn hơn năm hiện tại
-//                        if (year < 2000 || year > Calendar.getInstance().get(Calendar.YEAR)) {
-//                            edtYear.setError("Năm không hợp lệ");
-//                        }
-//                    } catch (NumberFormatException e) {
-//                        edtYear.setError("Nhập số năm hợp lệ");
-//                    }
-//                }
-//            }
-//
-//        });
-//    }
-
     private void createPdf() throws FileNotFoundException{
-//        System.out.println(totalRevenue2);
-//
-//        for (Map.Entry<String, Integer> entry : uniqueQuantity.entrySet()) {
-//            String key = entry.getKey();
-//            Integer value = entry.getValue();
-//            System.out.println("Key: " + key + ", Value: " + value);
-//        }
 
         String pdfPath = String.valueOf(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS));
         File file = new File(pdfPath, "RevenueStatistics"+edtYear.getText().toString()+".pdf");
@@ -251,7 +206,6 @@ public class Revenue extends AppCompatActivity {
 
         float columnWidth[] = {150f, 200f, 350f};
         Table table1 = new Table(columnWidth);
-//        table1.setBorder(Border.NO_BORDER);
 
         table1.addCell("");
 
@@ -280,25 +234,12 @@ public class Revenue extends AppCompatActivity {
         String tmpName = GlobalVariable.userInfo.getDisplayName();
         String tmpPhoneNumber = GlobalVariable.userInfo.getPhone();
 
-//        db.collection("users")
-//                .whereEqualTo("uid", uid)
-//                .get()
-//                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-//                    @Override
-//                    public void onSuccess(QuerySnapshot userQueryDocumentSnapshots) {
-//                        tempName = userQueryDocumentSnapshots.getDocuments().get(0).get("displayName").toString();
-//                        tempPhoneNumber = userQueryDocumentSnapshots.getDocuments().get(0).get("phone").toString();
-//                    }
-//                });
-
         //row3
         table1.addCell("Merchandiser:");
-//        table1.addCell(new Cell(1,2).add(new Paragraph(tempName)));
         table1.addCell(new Cell(1,2).add(new Paragraph(tmpName)));
 
         //row4
         table1.addCell("Phone number:");
-//        table1.addCell(new Cell(1,2).add(new Paragraph(tempPhoneNumber)));
         table1.addCell(new Cell(1,2).add(new Paragraph(tmpPhoneNumber)));
 
         // lấy thời gian hiện tại
@@ -309,8 +250,6 @@ public class Revenue extends AppCompatActivity {
         //row5
         table1.addCell("Created Date:");
         table1.addCell(new Cell(1,2).add(new Paragraph(sdf.format(calendar.getTime()))));
-
-
 
         //row6
         table1.addCell(new Cell(1,3).add(new Paragraph("")).setHeight(20));
@@ -342,10 +281,8 @@ public class Revenue extends AppCompatActivity {
                 .add(new Paragraph("Revenue")).setFontColor(new DeviceRgb(255, 255, 255))
                 .setBold().setFontSize(16));
 
-
-
         // Chuyển Map thành một danh sách các phần tử (entries)
-        List<Map.Entry<String, Integer>> entries = new ArrayList<>(uniqueRevenue.entrySet());
+        List<Map.Entry<String, Integer>> entries = new ArrayList<>(nameAndTotalRevenue.entrySet());
 
         // Sắp xếp danh sách các phần tử theo giá trị giảm dần
         Collections.sort(entries, new Comparator<Map.Entry<String, Integer>>() {
@@ -366,7 +303,7 @@ public class Revenue extends AppCompatActivity {
         for (Map.Entry<String, Integer> entry : sortedMapRevenue2.entrySet()) {
             String sortedKey = entry.getKey();
             Integer sortedValue2 = entry.getValue();
-            Integer sortedValue1 = uniqueQuantity.getOrDefault(sortedKey, 0);
+            Integer sortedValue1 = nameAndTotalQuantity.getOrDefault(sortedKey, 0);
             count++;
 
             //add row
@@ -385,7 +322,6 @@ public class Revenue extends AppCompatActivity {
         table2.addCell(new Cell().setBackgroundColor(new DeviceRgb(255, 71, 87))
                 .add(new Paragraph(formatter.format(totalRevenue2))).setFontColor(new DeviceRgb(255, 255, 255))
                 .setBold().setFontSize(16));
-
 
         // Vẽ barchart pdf
         // Tạo bitmap từ biểu đồ
@@ -459,8 +395,6 @@ public class Revenue extends AppCompatActivity {
                                                 if (!orderDetailQueryDocumentSnapshots.isEmpty()) {
                                                     // Lặp qua từng đơn đặt hàng
                                                     for (QueryDocumentSnapshot orderDetailSnapshot : orderDetailQueryDocumentSnapshots) {
-                                                        NumberFormat formatter = NumberFormat.getNumberInstance(new Locale("vi",
-                                                                "VN"));
                                                         int price;
                                                         try {
                                                             //lấy giá đơn hàng
@@ -506,13 +440,10 @@ public class Revenue extends AppCompatActivity {
 
                                                                                                     // Cập nhật tổng doanh thu của tháng
                                                                                                     int newRevenue = monthlyRevenueMap.getOrDefault(completedMonth, 0);
-
                                                                                                     newRevenue += price * quantity;
-
                                                                                                     monthlyRevenueMap.put(completedMonth, newRevenue);
 
                                                                                                     totalRevenue[0] += price * quantity;
-
 
                                                                                                     String newKey = productSnapshot.getString("productName"); // Đây là khóa muốn thêm vào Map
                                                                                                     if (!nameAndTotalQuantity.containsKey(newKey)) {
@@ -538,56 +469,38 @@ public class Revenue extends AppCompatActivity {
                                                                                             drawBarChart(monthlyRevenueMap);
 
                                                                                             //Gán tổng doanh thu vào text view
-                                                                                            NumberFormat formatter = NumberFormat.getNumberInstance(new Locale("vi", "VN"));
                                                                                             tvRevenue.setText(formatter.format(totalRevenue[0]));
 
-                                                                                            savedmonthlyRevenue = monthlyRevenueMap;
-                                                                                            uniqueQuantity = nameAndTotalQuantity;
-                                                                                            uniqueRevenue = nameAndTotalRevenue;
                                                                                             totalRevenue2 = totalRevenue[0];
 
-
+                                                                                            //Vẽ bảng
+                                                                                            drawTable(nameAndTotalQuantity, nameAndTotalRevenue);
 
                                                                                         }
                                                                                     });
 
                                                                         }
-
-
                                                                     }
                                                                 });
 
-
                                                     }
                                                 }
-
-
                                             }
                                         });
 
-
                             }
                         }
-
-
                     }
                 });
 
-        //setText cho trục y của biểu đồ
-        tvVND.setText("vnd");
-//        if(totalRevenue2==0){
-//            Toast.makeText(this, "No Data !!! :(", Toast.LENGTH_SHORT).show();
-//        }
+    }
 
-        //drawTable(uniqueQuantity, uniqueRevenue);
+    private void drawTable(Map<String, Integer> nameAndTotalQuantity, Map<String, Integer> nameAndTotalRevenue) {
         tlRevenue.setPadding(8,8,8,8);
         tvTitle.setText("Bảng: Top 5 sản phẩm có doanh thu cao nhất năm "+edtYear.getText().toString());
 
-    }
-
-    private void drawTable(Map<String, Integer> uniqueQuantity, Map<String, Integer> uniqueRevenue) {
         // Chuyển Map thành một danh sách các phần tử (entries)
-        List<Map.Entry<String, Integer>> entries = new ArrayList<>(uniqueRevenue.entrySet());
+        List<Map.Entry<String, Integer>> entries = new ArrayList<>(nameAndTotalRevenue.entrySet());
 
         // Sắp xếp danh sách các phần tử theo giá trị giảm dần
         Collections.sort(entries, new Comparator<Map.Entry<String, Integer>>() {
@@ -611,7 +524,7 @@ public class Revenue extends AppCompatActivity {
             if (count < 5) {
                 String sortedKey = entry.getKey();
                 Integer sortedValue2 = entry.getValue();
-                Integer sortedValue1 = uniqueQuantity.getOrDefault(sortedKey,0);
+                Integer sortedValue1 = nameAndTotalQuantity.getOrDefault(sortedKey,0);
                 count++;
 
                 //Tạo một TableRow mới
@@ -627,9 +540,6 @@ public class Revenue extends AppCompatActivity {
                 tvProductName.setText(sortedKey);
                 tvProductName.setPadding(8, 8, 8, 8);
                 row.addView(tvProductName);
-
-
-                NumberFormat formatter = NumberFormat.getNumberInstance(new Locale("vi", "VN"));
 
                 TextView tvQuantity = new TextView(Revenue.this);
                 tvQuantity.setLayoutParams(new TableRow.LayoutParams(85, TableRow.LayoutParams.WRAP_CONTENT)); // Đặt kích thước
@@ -698,6 +608,8 @@ public class Revenue extends AppCompatActivity {
         YAxis yAxisRight = barChart.getAxisRight();
         yAxisRight.setEnabled(false); // Tắt trục Y bên phải
         barChart.getAxisLeft().setAxisMinimum(0);
+        //setText cho trục y của biểu đồ
+        tvVND.setText("vnd");
 
     }
 }
