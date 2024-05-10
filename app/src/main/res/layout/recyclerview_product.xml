@@ -12,36 +12,17 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal">
-        <RelativeLayout
-            android:layout_width="100dp"
-            android:layout_height="140dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginStart="10dp">
-
             <ImageView
                 android:id="@+id/imageView"
-                android:layout_width="match_parent"
+                android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_gravity="center"
-                android:layout_marginStart="7dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="7dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="5dp"
                 android:layout_marginBottom="7dp"
                 android:scaleType="fitXY"
                 android:src="@drawable/icon_image_add" />
-            <TextView
-                android:layout_width="25dp"
-                android:layout_height="20dp"
-                android:layout_marginStart="70dp"
-                android:layout_marginTop="5dp"
-                android:id="@+id/tvDisCount"
-                android:text="DC"
-                android:textSize="10sp"
-                android:textStyle="bold"
-                android:textColor="@color/red"
-                android:fontFamily="@font/roboto_regular"
-                />
-        </RelativeLayout>
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"

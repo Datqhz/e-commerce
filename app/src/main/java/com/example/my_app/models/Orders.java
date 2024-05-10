@@ -8,6 +8,7 @@ public class Orders implements Serializable {
     private Date createDate;
     private String address;
     private String uid;
+    private String paymentMethod;
 
     public Orders() {
     }
@@ -49,5 +50,13 @@ public class Orders implements Serializable {
 
     public void setUid(String uid) {
         this.uid = uid;
+    }
+
+    public String getPaymentMethod() {
+        return paymentMethod;
+    }
+
+    public void setPaymentMethod(String paymentMethod) {
+        this.paymentMethod = paymentMethod;
     }
 }

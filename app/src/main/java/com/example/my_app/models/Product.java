@@ -13,12 +13,11 @@ public class Product implements Serializable {
     private String productId;
     private String uid;
     private List<Rating> ratings;
-    private int disCount;
 
     public Product(){
     }
 
-    public Product(String productName, ArrayList<String> listImageUrl, String desc, String price, int quantity, String categoryName, String productId, String uid, List<Rating> ratings, int disCount) {
+    public Product(String productName, ArrayList<String> listImageUrl, String desc, String price, int quantity, String categoryName, String productId, String uid, List<Rating> ratings) {
         this.productName = productName;
         this.listImageUrl = listImageUrl;
         this.desc = desc;
@@ -28,7 +27,6 @@ public class Product implements Serializable {
         this.productId = productId;
         this.uid = uid;
         this.ratings = ratings;
-        this.disCount = disCount;
     }
 
     public String getProductName() {
@@ -103,11 +101,4 @@ public class Product implements Serializable {
         this.ratings = ratings;
     }
 
-    public int getDisCount() {
-        return disCount;
-    }
-
-    public void setDisCount(int disCount) {
-        this.disCount = disCount;
-    }
 }

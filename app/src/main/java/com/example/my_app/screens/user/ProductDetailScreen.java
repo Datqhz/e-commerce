@@ -8,6 +8,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,8 +28,10 @@ import com.example.my_app.models.Product;
 import com.example.my_app.models.Rating;
 import com.example.my_app.models.UserInfo;
 import com.example.my_app.shared.GlobalVariable;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.firebase.firestore.DocumentReference;
@@ -56,6 +59,7 @@ public class ProductDetailScreen extends Fragment {
     private TextView productPrice, productName, productRatingDisplay, productDetailDescText,
             productDetailRatingBarText, productDetailTotalRatings, productDetailShopName, buyNowBtn;
     private RatingBar productRatingBar;
+    boolean isToastShown = false;
 
     public ProductDetailScreen(BottomNavigationView bottomNavigationView) {
         this.bottomNavigationView = bottomNavigationView;
@@ -157,59 +161,7 @@ public class ProductDetailScreen extends Fragment {
             }
         });
 
-        productRatingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
-            @Override
-            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
-                final boolean[] isToastShown = {false};
-
-                Rating ratingData = new Rating();
-                ratingData.setUid(GlobalVariable.getUserInfo().getUid());
-                ratingData.setRating(rating);
-                ratingData.setComment("");
-
-                db.collection("orders").whereEqualTo("uid", GlobalVariable.getUserInfo().getUid())
-                                .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                            @Override
-                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                if (!queryDocumentSnapshots.isEmpty()) {
-                                    List<DocumentSnapshot> orderDocs = queryDocumentSnapshots.getDocuments();
-                                    for (DocumentSnapshot order : orderDocs) {
-                                        Orders orderItem = order.toObject(Orders.class);
-
-                                        db.collection("order_detail")
-                                                .whereEqualTo("orderId", orderItem.getOrderId())
-                                                .whereEqualTo("productId", product.getProductId())
-                                                .get()
-                                                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                                                    @Override
-                                                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                                        if (!queryDocumentSnapshots.isEmpty()) {
-                                                            if (!isToastShown[0]) {
-                                                                ratingProduct(product, ratingData, view);
-                                                                isToastShown[0] = true;
-                                                            }
-                                                        } else {
-                                                            if (!isToastShown[0]) {
-                                                                Toast.makeText(view.getContext(), "Bạn không thể đánh giá sản phẩm này", Toast.LENGTH_SHORT).show();
-                                                                isToastShown[0] = true;
-                                                                productRatingBar.setRating(0);
-                                                            }
-                                                        }
-                                                    }
-                                                }).addOnFailureListener(new OnFailureListener() {
-                                                    @Override
-                                                    public void onFailure(@NonNull Exception e) {
-                                                        Toast.makeText(view.getContext(), "Đánh giá sản phẩm thất bại", Toast.LENGTH_SHORT).show();
-                                                    }
-                                                });
-                                    }
-                                } else {
-                                    Toast.makeText(view.getContext(), "Bạn không thể đánh giá sản phẩm này", Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
-            }
-        });
+        setRatingToDatabase(product);
 
         buyNowBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -330,7 +282,69 @@ public class ProductDetailScreen extends Fragment {
 
     }
 
-    private void ratingProduct(Product product, Rating ratingData, View view) {
+    private void setRatingToDatabase(Product product) {
+        productRatingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                final boolean[] isToastShown = {false};
+
+                Rating ratingData = new Rating();
+                ratingData.setUid(GlobalVariable.getUserInfo().getUid());
+                ratingData.setRating(rating);
+                ratingData.setComment("");
+
+                db.collection("orders").whereEqualTo("uid", GlobalVariable.getUserInfo().getUid())
+                        .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                            @Override
+                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                if (!queryDocumentSnapshots.isEmpty()) {
+                                    List<DocumentSnapshot> orderDocs = queryDocumentSnapshots.getDocuments();
+                                    final int[] queriesCompleted = {0};
+                                    final int totalQueries = orderDocs.size();
+
+                                    for (DocumentSnapshot order : orderDocs) {
+                                        Orders orderItem = order.toObject(Orders.class);
+
+                                        db.collection("order_detail")
+                                                .whereEqualTo("orderId", orderItem.getOrderId())
+                                                .whereEqualTo("productId", product.getProductId())
+                                                .get()
+                                                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                        queriesCompleted[0]++;
+
+                                                        if (task.isSuccessful()) {
+                                                            QuerySnapshot queryDocumentSnapshots = task.getResult();
+                                                            if (!queryDocumentSnapshots.isEmpty()) {
+                                                                if (!isToastShown[0]) {
+                                                                    ratingProduct(product, ratingData);
+                                                                    isToastShown[0] = true;
+                                                                }
+                                                            }
+                                                        } else {
+                                                            Log.d("Firestore", "Error getting documents: ", task.getException());
+                                                        }
+
+                                                        if (queriesCompleted[0] == totalQueries && !isToastShown[0]) {
+                                                            Toast.makeText(getContext(), "Bạn không thể đánh giá sản phẩm này", Toast.LENGTH_SHORT).show();
+                                                            isToastShown[0] = true;
+                                                            ratingBar.setRating(0);
+                                                        }
+                                                    }
+                                                });
+                                    }
+
+                                } else {
+                                    Toast.makeText(getContext(), "Bạn không thể đánh giá sản phẩm này", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+            }
+        });
+    }
+
+    private void ratingProduct(Product product, Rating ratingData) {
         db.collection("products").document(product.getProductId())
                 .collection("ratings")
                 .document(GlobalVariable.getUserInfo().getUid())
@@ -338,13 +352,13 @@ public class ProductDetailScreen extends Fragment {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
-                        Toast.makeText(view.getContext(), "Đánh giá thành công", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Đánh giá thành công", Toast.LENGTH_SHORT).show();
                         productDetailRatingBarText.setText(ratingData.getRating() + "/5");
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(view.getContext(), "Đánh giá thất bại", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Đánh giá thất bại", Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -361,5 +375,9 @@ public class ProductDetailScreen extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         onBackPressedProductDetailCallback.remove();
+    }
+
+    public interface RatingCallback {
+        void onRatingChanged(boolean isValid);
     }
 }

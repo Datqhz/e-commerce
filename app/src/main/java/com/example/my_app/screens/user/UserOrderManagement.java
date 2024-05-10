@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
+
 import android.widget.ImageButton;
 
 import com.example.my_app.R;
@@ -34,7 +35,6 @@ public class UserOrderManagement extends AppCompatActivity {
 
     TabLayout tlTabs;
     RecyclerView rvOrderList;
-
     UserOrderAdapter adapter;
     List<Orders> userOrders;
     ImageButton btnPrevious;
@@ -60,8 +60,8 @@ public class UserOrderManagement extends AppCompatActivity {
         tlTabs.addTab(tlTabs.newTab().setText("Đã giao"));
         tlTabs.addTab(tlTabs.newTab().setText("Đã hủy"));
         rvOrderList = findViewById(R.id.rvOrderList);
-        btnPrevious = findViewById(R.id.btnPrevious);
 
+        btnPrevious = findViewById(R.id.btnPrevious);
     }
     private void setEvent(){
         tlTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {

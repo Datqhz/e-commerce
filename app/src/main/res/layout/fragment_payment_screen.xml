@@ -135,6 +135,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <LinearLayout
+                android:id="@+id/payment_screen_payment_method"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -152,6 +153,7 @@
                     android:text="Phương thức thanh toán"/>
 
                 <TextView
+                    android:id="@+id/payment_screen_method_name"
                     android:layout_width="170dp"
                     android:layout_height="wrap_content"
                     android:paddingStart="50dp"
