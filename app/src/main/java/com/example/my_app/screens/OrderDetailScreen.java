@@ -18,6 +18,7 @@ import com.example.my_app.models.DeliveryStatus;
 import com.example.my_app.models.OrderDetail;
 import com.example.my_app.models.Orders;
 import com.example.my_app.models.Product;
+import com.example.my_app.models.UserInfo;
 import com.example.my_app.view_adapter.ProductOrderAdapter;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -37,7 +38,7 @@ import java.util.Locale;
 
 public class OrderDetailScreen extends AppCompatActivity {
 
-    TextView edtStatus, edtshopName, edtTotal;
+    TextView edtStatus, edtshopName, edtTotal, tvAddress, tvBuyer;
     RecyclerView listOrderDetail;
     private Orders order;
     ProductOrderAdapter adapter;
@@ -58,6 +59,9 @@ public class OrderDetailScreen extends AppCompatActivity {
         edtTotal = findViewById(R.id.totalPrice1);
         btnPrevious = findViewById(R.id.btnPrevious);
         listOrderDetail = findViewById(R.id.allProduct);
+        tvAddress = findViewById(R.id.tvAddress);
+        tvBuyer = findViewById(R.id.tvBuyer);
+
         Intent intent = getIntent();
         order = (Orders) intent.getSerializableExtra("order");
         adapter = new ProductOrderAdapter(orderDetailList);
@@ -72,6 +76,15 @@ public class OrderDetailScreen extends AppCompatActivity {
         });
         listOrderDetail.setAdapter(adapter);
         listOrderDetail.setLayoutManager(new LinearLayoutManager(this));
+        tvAddress.setText(order.getAddress());
+
+        db.collection("users").document(order.getUid()).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@androidx.annotation.Nullable DocumentSnapshot value, @androidx.annotation.Nullable FirebaseFirestoreException error) {
+                UserInfo buyer= value.toObject(UserInfo.class);
+                tvBuyer.setText(buyer.getDisplayName());
+            }
+        });
         db.collection("order_detail").whereEqualTo("orderId",order.getOrderId()).addSnapshotListener(new EventListener<QuerySnapshot>(){
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
@@ -133,17 +146,7 @@ public class OrderDetailScreen extends AppCompatActivity {
                         edtStatus.setText("Đơn hàng "+ds.getStatusName());
                     }
                 });
-                //shop name
-
             }
-
         });
-
-
     }
-
-
-
-
-
 }

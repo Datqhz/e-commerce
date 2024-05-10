@@ -37,7 +37,7 @@ import java.util.concurrent.TimeUnit;
 
 public class VerifyScreen extends AppCompatActivity {
     UserInfo userInfo;
-    Button btnVerify;
+    Button btnVerify, btnResend;
     EditText edtOTP;
     TextView tvVerifyContent;
     String password;
@@ -60,6 +60,7 @@ public class VerifyScreen extends AppCompatActivity {
         tvVerifyContent = findViewById(R.id.tvVerifyContent);
         btnVerify = findViewById(R.id.btnVerify);
         edtOTP = findViewById(R.id.edtOTP);
+        btnResend = findViewById(R.id.btnResend);
 
     }
     private void setEvent(){
@@ -70,7 +71,15 @@ public class VerifyScreen extends AppCompatActivity {
                 verifyCode();
             }
         });
+        btnResend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                verifyPhoneNumber();
+                Toast.makeText(getApplicationContext(), "Mã OTP đang được gửi đến bạn", Toast.LENGTH_LONG).show();
+            }
+        });
     }
+
 
     private void verifyPhoneNumber() {
         String phone = "+84"+userInfo.getPhone().substring(1);
@@ -99,16 +108,23 @@ public class VerifyScreen extends AppCompatActivity {
         PhoneAuthProvider.verifyPhoneNumber(options);
     }
     private void verifyCode() {
-        System.out.println("otp user type: " + edtOTP.getText().toString().trim());
-        if(otp.equals(edtOTP.getText().toString().trim())){
-            System.out.println("start create");
-            Executors.newSingleThreadExecutor().submit(this::createUserWithEmailAndPassword);
-//            CompletableFuture.runAsync(this::createUserWithEmailAndPassword);
-            Intent i = new Intent(getApplicationContext(), MainActivity.class);
-            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(i);
+        if(edtOTP.getText().toString().trim().equals("")){
+            Toast.makeText(VerifyScreen.this, "Vui lòng nhập mã OTP.", Toast.LENGTH_LONG).show();
         }else {
-            Toast.makeText(VerifyScreen.this, "Mã xác thực sai hoặc đã quá hạn.", Toast.LENGTH_LONG).show();
+            if(edtOTP.getText().toString().trim().length()!=6){
+                Toast.makeText(VerifyScreen.this, "Độ dài OTP không hợp lệ.", Toast.LENGTH_LONG).show();
+            }else {
+                if(otp.equals(edtOTP.getText().toString().trim())){
+                    System.out.println("start create");
+                    Executors.newSingleThreadExecutor().submit(this::createUserWithEmailAndPassword);
+//            CompletableFuture.runAsync(this::createUserWithEmailAndPassword);
+                    Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(i);
+                }else {
+                    Toast.makeText(VerifyScreen.this, "Mã xác thực sai hoặc đã quá hạn.", Toast.LENGTH_LONG).show();
+                }
+            }
         }
     }
     private void createUserWithEmailAndPassword() {

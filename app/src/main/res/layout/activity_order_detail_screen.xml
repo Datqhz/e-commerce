@@ -79,13 +79,49 @@
             android:src="@drawable/order_img"/>
 
     </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:id="@+id/displayName"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/thongbao"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Người đặt: "
+            android:fontFamily="@font/roboto_bold"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvBuyer"
+            android:text="Người đặt: "
+            android:fontFamily="@font/roboto_bold"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:id="@+id/address"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/displayName"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Địa chỉ: "
+            android:fontFamily="@font/roboto_bold"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvAddress"
+            android:text="Người đặt: "
+            android:fontFamily="@font/roboto_medium"/>
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:id="@+id/info1"
-        android:layout_below="@id/thongbao">
+        android:layout_below="@+id/address">
 
         <TextView
             android:id="@+id/shop_mall"
