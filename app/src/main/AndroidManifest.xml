@@ -48,10 +48,6 @@
             android:name=".screens.user.SearchByName"
             android:exported="false" />
         <activity
-            android:name=".screens.merchandiser.Revenue"
-            android:exported="false"
-            android:parentActivityName=".screens.merchandiser.ProductManagement" />
-        <activity
             android:name=".screens.user.HomeScreen"
             android:exported="false" />
         <activity
