@@ -1,169 +1,175 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".screens.merchandiser.Revenue"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+tools:context=".screens.merchandiser.Revenue"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:orientation="vertical">
+
+<LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+
+    <androidx.appcompat.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#D55E39"
+        android:minHeight="?attr/actionBarSize"
+        app:title="Thống kê doanh thu"
+        app:titleTextColor="@android:color/white" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:background="#ced6e0"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:text="Nhập vào số năm:"
+            android:textColor="@color/black"
+            android:layout_marginRight="30dp"/>
+
+        <EditText
+            android:id="@+id/edtYear"
+            android:layout_width="85dp"
+            android:layout_height="wrap_content"
+            android:background="#ffffff"
+            android:hint="ví dụ: 2024"
+            android:textSize="13dp"/>
+
+        <Button
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginLeft="20dp"
+            android:textColor="#D55E39"
+            android:background="@drawable/loupe"
+            android:id="@+id/btnSearchYear" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:background="#ced6e0"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:text="Tổng doanh thu:"
+            android:textColor="@color/black"
+            android:layout_marginRight="20dp"/>
+
+        <TextView
+            android:id="@+id/tvRevenue"
+            android:layout_width="110dp"
+            android:layout_height="wrap_content"
+            android:background="#D55E39"
+            android:textColor="@color/white"
+            android:textSize="15dp" />
+
+        <Button
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginLeft="20dp"
+            android:background="@drawable/export"
+            android:id="@+id/btnExport"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvVND"
+        android:layout_width="50dp"
+        android:layout_height="30dp"
+        android:background="@color/white"
+        android:textColor="@color/black"
+        android:gravity="center|bottom"
+        android:textSize="13dp"/>
+
+    <com.github.mikephil.charting.charts.BarChart
+        android:id="@+id/barChart"
+        android:layout_width="match_parent"
+        android:layout_height="350dp"
+        android:layout_gravity="top"
+        android:layout_marginBottom="15dp" />
+
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-
-        <androidx.appcompat.widget.Toolbar
-            android:layout_width="match_parent"
+        <TableLayout
+            android:id="@+id/tlTitle"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="#D55E39"
-            android:minHeight="?attr/actionBarSize"
-            app:title="Thống kê doanh thu"
-            app:titleTextColor="@android:color/white" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:orientation="horizontal"
-            android:background="#ced6e0"
-            android:gravity="center">
-
-            <TextView
-                android:layout_width="wrap_content"
+            android:stretchColumns="*"
+            android:paddingLeft ="5dp"
+            android:paddingTop ="5dp"
+            android:paddingRight ="5dp"
+            android:background="#BA124B">
+            <TableRow
+                android:id="@+id/trTitle"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-
-                android:text="Nhập vào số năm:"
-                android:textColor="@color/black"
-                android:layout_marginRight="30dp"/>
-
-            <EditText
-                android:id="@+id/edtYear"
-                android:layout_width="85dp"
-                android:layout_height="wrap_content"
-                android:background="#ffffff"
-                android:hint="ví dụ: 2024"
-                android:textSize="13dp"/>
-
-            <Button
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_marginLeft="20dp"
-                android:textColor="#D55E39"
-                android:background="@drawable/baseline_search_24"
-                android:id="@+id/btnSearchYear" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:orientation="horizontal"
-            android:background="#ced6e0"
-            android:gravity="center">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-                android:text="Tổng doanh thu:"
-                android:textColor="@color/black"
-                android:layout_marginRight="30dp"/>
-
-            <TextView
-                android:id="@+id/tvRevenue"
-                android:layout_width="110dp"
-                android:layout_height="wrap_content"
-                android:background="#D55E39"
-                android:textColor="@color/white"
-                android:textSize="15dp" />
-
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/tvVND"
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:background="@color/white"
-            android:textColor="@color/black"
-            android:gravity="start|center_vertical"
-            android:backgroundTint="@color/transparent"
-            android:textSize="13dp"/>
-
-        <com.github.mikephil.charting.charts.BarChart
-            android:id="@+id/barChart"
-            android:layout_width="match_parent"
-            android:layout_height="350dp"
-            android:layout_gravity="top"
-            android:layout_marginBottom="15dp" />
-
-        <TextView
-            android:id="@+id/tvTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"/>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-            <TableLayout
-                android:id="@+id/tlTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:stretchColumns="*"
-                android:paddingLeft ="5dp"
-                android:paddingTop ="5dp"
-                android:paddingRight ="5dp"
                 android:background="#BA124B">
-                <TableRow
-                    android:id="@+id/trTitle"
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/tvProductName"
+
                     android:layout_height="wrap_content"
-                    android:background="#BA124B">
-                    <TextView
-                        android:id="@+id/tvProductName"
+                    android:background="#D36F4F"
+                    android:padding="8dp"
+                    android:textColor="@color/white"
+                    android:text="Tên sản phẩm"
+                    android:textAppearance="?android:attr/textAppearanceMedium">
+                    <!--                        android:layout_width="220dp"-->
+                </TextView>
+                <TextView
+                    android:id="@+id/tvQuantity"
+                    android:textColor="@color/white"
+                    android:layout_height="wrap_content"
+                    android:background="#D36F4F"
+                    android:padding="8dp"
+                    android:text="Số lượng"
+                    android:textAppearance="?android:attr/textAppearanceMedium">
+                    <!--                        android:layout_width="85dp"-->
+                </TextView>
+                <TextView
+                    android:id="@+id/tvRevenueSP"
+                    android:textColor="@color/white"
+                    android:layout_height="wrap_content"
+                    android:background="#D36F4F"
+                    android:padding="8dp"
+                    android:text="Doanh thu"
+                    android:textAppearance="?android:attr/textAppearanceMedium">
+                    <!--                        android:layout_width="105dp"-->
+                </TextView>
+            </TableRow>
+        </TableLayout>
+        <TableLayout
+            android:id="@+id/tlRevenue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:stretchColumns="*"
+            android:background="#BA124B">
 
-                        android:layout_height="wrap_content"
-                        android:background="#D36F4F"
-                        android:padding="8dp"
-                        android:textColor="@color/white"
-                        android:text="Tên sản phẩm"
-                        android:textAppearance="?android:attr/textAppearanceMedium">
-                        <!--                        android:layout_width="220dp"-->
-                    </TextView>
-                    <TextView
-                        android:id="@+id/tvQuantity"
-                        android:textColor="@color/white"
-                        android:layout_height="wrap_content"
-                        android:background="#D36F4F"
-                        android:padding="8dp"
-                        android:text="Số lượng"
-                        android:textAppearance="?android:attr/textAppearanceMedium">
-                        <!--                        android:layout_width="85dp"-->
-                    </TextView>
-                    <TextView
-                        android:id="@+id/tvRevenueSP"
-                        android:textColor="@color/white"
-                        android:layout_height="wrap_content"
-                        android:background="#D36F4F"
-                        android:padding="8dp"
-                        android:text="Doanh thu"
-                        android:textAppearance="?android:attr/textAppearanceMedium">
-                        <!--                        android:layout_width="105dp"-->
-                    </TextView>
-                </TableRow>
-            </TableLayout>
-            <TableLayout
-                android:id="@+id/tlAvenue"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:stretchColumns="*"
-                android:background="#BA124B">
+        </TableLayout>
 
-            </TableLayout>
-
-        </LinearLayout>
     </LinearLayout>
+</LinearLayout>
 
 
 </ScrollView>
