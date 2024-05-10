@@ -282,22 +282,21 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:numStars="5"
-                                android:stepSize="0.1"
+                                android:stepSize="0.5"
                                 android:rating="3"
-                                android:theme="@style/RatingBar"
-                                style="?android:attr/ratingBarStyleSmall" />
+                                android:theme="@style/RatingBar"/>
                             <TextView
                                 android:id="@+id/product_detail_rating_bar_text"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="16dp"
+                                android:layout_marginStart="6dp"
                                 android:text="TextView"
                                 android:textColor="@color/primary_color"/>
                             <TextView
                                 android:id="@+id/product_detail_total_ratings"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="16dp"
+                                android:layout_marginStart="6dp"
                                 android:text="TextView"
                                 android:textColor="@color/light_grey"/>
                         </LinearLayout>
@@ -311,7 +310,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@drawable/bg_element">
+        android:background="@color/white">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/horizontal_line_color"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <LinearLayout
             android:layout_width="match_parent"

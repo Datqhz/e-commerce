@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:padding="10dp">
+
+        <RadioButton
+            android:id="@+id/address_box_active"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:buttonTint="@color/primary_color"
+            android:checked="false"
+            android:maxWidth="340dp"
+            android:maxLines="2"
+            android:text="296/4 Điện Biên Phủ, Bình Thạnh, Thành phố Hồ Chí Minh"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/address_box_delete_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingEnd="16dp"
+            android:src="@drawable/icon_delete_image"
+            app:layout_constraintBottom_toBottomOf="@+id/address_box_active"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/address_box_active" />
+
+<!--        <TextView-->
+<!--            android:id="@+id/address_box_is_default"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:background="@drawable/bg_element"-->
+<!--            android:padding="4dp"-->
+<!--            android:text="Mặc định"-->
+<!--            android:textSize="12sp"-->
+<!--            android:visibility="gone"-->
+<!--            android:layout_marginStart="30dp"-->
+<!--            android:textColor="@color/primary_color"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/address_box_active" />-->
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/primary_color" />
+</LinearLayout>

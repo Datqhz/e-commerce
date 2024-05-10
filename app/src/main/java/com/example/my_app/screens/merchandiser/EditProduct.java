@@ -27,6 +27,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.my_app.R;
+import com.example.my_app.shared.GlobalVariable;
 import com.example.my_app.view_adapter.ProductAdapterImage;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -71,6 +72,7 @@ public class EditProduct extends AppCompatActivity {
     private String uid;
     private int countNew = 0;
     private  boolean checkEdit = true;
+    private  String productNameOld;
     private final ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
         @Override
         public void onActivityResult(ActivityResult o) {
@@ -78,7 +80,7 @@ public class EditProduct extends AppCompatActivity {
                 if(o.getData() != null && o.getData().getClipData() != null){
                     int count = o.getData().getClipData().getItemCount();
                     for(int i = 0; i < count; i++){
-                        if(uriArrayList.size() < 10){
+                        if(uriArrayList.size() < 8){
                             countNew = countNew + 1;
                             imageUri = o.getData().getClipData().getItemAt(i).getUri();
 
@@ -91,7 +93,7 @@ public class EditProduct extends AppCompatActivity {
                     }
                     recyclerProductImage.notifyDataSetChanged();
                 } else if (o.getData().getData() != null) {
-                    if(uriArrayList.size() < 10){
+                    if(uriArrayList.size() < 8){
                         countNew = countNew + 1;
                         //imageUrl = o.getData().getData().getPath();
                         imageUri = o.getData().getData();
@@ -102,8 +104,6 @@ public class EditProduct extends AppCompatActivity {
                     }
                 }
                 recyclerProductImage.notifyDataSetChanged();
-            }else{
-                Toast.makeText(EditProduct.this, "Vui lòng chọn hình ảnh sản phẩm", Toast.LENGTH_LONG).show();
             }
         }
     });
@@ -161,7 +161,7 @@ public class EditProduct extends AppCompatActivity {
                 });
     }
     private void getProductName() {
-        firestore.collection("products")
+        firestore.collection("products").whereEqualTo("uid", GlobalVariable.userInfo.getUid())
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
@@ -172,6 +172,7 @@ public class EditProduct extends AppCompatActivity {
                         productNameList.clear();
                         for(QueryDocumentSnapshot dc : value){
                             productNameList.add(dc.get("productName").toString());
+
                         }
                     }
                 });
@@ -179,11 +180,11 @@ public class EditProduct extends AppCompatActivity {
     private void setEvent() {
         Bundle bundle = getIntent().getExtras();
         if(bundle != null){
-            edtProductName.setText(bundle.getString("productName"));
+            productNameOld = bundle.getString("productName");
+            edtProductName.setText(productNameOld);
             edtDesc.setText(bundle.getString("desc"));
             edtPrice.setText(bundle.getString("price"));
             String tempp = bundle.getString("quantity");
-
             edtQuantity.setText(tempp);
             String temp = bundle.getString("category");
 //                for(int i = 0; i < categoryArrayList.size();i++){
@@ -217,16 +218,67 @@ public class EditProduct extends AppCompatActivity {
                 pickImageFromGallery();
             }
         });
-
+        getProductName();
         uploadCategoryintoProduct();
 
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(checkEdit){
-                    updateProductInfo(listImageUrl);
-                }else {
-                    editImageToStorage();
+                String productName = (edtProductName.getText().toString().replaceAll("\\s+", " ")).trim().toLowerCase();
+                Boolean canNext = true;
+                if(uriArrayList == null ){
+                    Toast.makeText(EditProduct.this, "Vui lòng chọn hình ảnh sản phẩm", Toast.LENGTH_SHORT).show();
+                    canNext = false;
+                }
+                if (productName.equals("")) {
+                    edtProductName.setError("Vui lòng nhập tên sản phẩm!");
+                    edtProductName.setFocusable(true);
+                    canNext = false;
+                }else if(!productName.equals(productNameOld.toLowerCase())){
+                    for(int i=0;i<productNameList.size();i++){
+                        if(productName.equals(productNameList.get(i).toLowerCase())){
+                            edtProductName.setError("Tên sản phẩm đã tồn tại!");
+                            edtProductName.setFocusable(true);
+                            canNext = false;
+                        }
+                    }
+                }
+                if (edtDesc.getText().toString().trim().equals("")) {
+                    edtDesc.setError("Vui lòng nhập mô tả sản phẩm!");
+                    edtDesc.setFocusable(true);
+                    canNext = false;
+                }
+                if (edtPrice.getText().toString().trim().equals("")) {
+                    edtPrice.setError("Vui lòng nhập giá sản phẩm!");
+                    edtPrice.setFocusable(true);
+                    canNext = false;
+                }
+                if (edtQuantity.getText().toString().trim().equals("")) {
+                    edtQuantity.setError("Vui lòng nhập số lượng sản phẩm!");
+                    edtQuantity.setFocusable(true);
+                    canNext = false;
+                }
+                if(canNext) {
+                    if (checkEdit) {
+                        if (!listImageUrlDelete.isEmpty()) {
+                            for (int i = 0; i < listImageUrlDelete.size(); i++) {
+                                listImageUrl.remove(listImageUrlDelete.get(i));
+                            }
+
+                            for (int i = 0; i < listImageUrlDelete.size(); i++) {
+                                storageReference = storage.getReferenceFromUrl(listImageUrlDelete.get(i));
+                                storageReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void unused) {
+                                        //Toast.makeText(v.getContext(), "Xóa hình ảnh thành công", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            }
+                        }
+                        updateProductInfo(listImageUrl);
+                    } else {
+                        editImageToStorage();
+                    }
                 }
             }
         });
@@ -254,41 +306,7 @@ public class EditProduct extends AppCompatActivity {
         activityResultLauncher.launch(Intent.createChooser(intent, "Chọn hình ảnh"));
     }
     private void editImageToStorage() {
-        String productName = (edtProductName.getText().toString().replaceAll("\\s+", " ")).trim().toLowerCase();
-        Boolean canNext = true;
-        if(uriArrayList == null ){
-            Toast.makeText(this, "Vui lòng chọn hình ảnh danh mục", Toast.LENGTH_SHORT).show();
-            canNext = false;
-        }
-        if (productName.equals("")) {
-            edtProductName.setError("Vui lòng nhập tên sản phẩm!");
-            edtProductName.setFocusable(true);
-            canNext = false;
-        }else {
-            for(int i=0;i<productNameList.size();i++){
-                if(productName.equals(productNameList.get(i).toLowerCase())){
-                    edtProductName.setError("Tên sản phẩm đã tồn tại!");
-                    edtProductName.setFocusable(true);
-                    canNext = false;
-                }
-            }
-        }
-        if (edtDesc.getText().toString().trim().equals("")) {
-            edtDesc.setError("Vui lòng nhập mô tả sản phẩm!");
-            edtDesc.setFocusable(true);
-            canNext = false;
-        }
-        if (edtPrice.getText().toString().trim().equals("")) {
-            edtPrice.setError("Vui lòng nhập giá sản phẩm!");
-            edtPrice.setFocusable(true);
-            canNext = false;
-        }
-        if (edtQuantity.getText().toString().trim().equals("")) {
-            edtQuantity.setError("Vui lòng nhập số lượng sản phẩm!");
-            edtQuantity.setFocusable(true);
-            canNext = false;
-        }
-        if(canNext) {
+
             final String randomName = UUID.randomUUID().toString();
             for (int i = uriArrayList.size() - countNew; i < uriArrayList.size(); i++) {
                 Uri tempImageUri = uriArrayList.get(i);
@@ -344,7 +362,7 @@ public class EditProduct extends AppCompatActivity {
                         }
                     });
                 }
-            }
+
         }
     }
     private void updateProductInfo(ArrayList<String> listImageUrl){

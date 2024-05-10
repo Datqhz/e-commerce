@@ -80,7 +80,6 @@ public class ProductManagement extends AppCompatActivity {
 
     }
     private void getProductInfo() {
-        System.out.println("get data");
         firestore.collection("products").whereEqualTo("uid", GlobalVariable.userInfo.getUid())
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
@@ -156,12 +155,19 @@ public class ProductManagement extends AppCompatActivity {
             AlertDialog dialog = builder.create();
             dialog.show();
             return true;
+        }else  if(itemid == R.id.menu_item_userInfo){
+            Intent intent = new Intent(ProductManagement.this, MerchandiserInfo.class);
+            startActivity(intent);
+            return true;
         }else  if(itemid == R.id.menu_item_revenue){
             Intent intent = new Intent(ProductManagement.this, Revenue.class);
             startActivity(intent);
             return true;
-
-        }
+        }else  if(itemid == R.id.menu_item_orderManagement){
+        Intent intent = new Intent(ProductManagement.this, MerOrderManagement.class);
+        startActivity(intent);
+        return true;
+    }
         return super.onOptionsItemSelected(item);
     }
 

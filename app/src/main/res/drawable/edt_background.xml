@@ -7,7 +7,7 @@
     </item>
     <item android:bottom="2dp">
         <shape>
-            <solid android:color="@color/primaryColor" /> <!-- Background color -->
+            <solid android:color="@color/transparent" /> <!-- Background color -->
         </shape>
     </item>
     <item android:bottom="1dp">

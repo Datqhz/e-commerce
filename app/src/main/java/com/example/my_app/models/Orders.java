@@ -1,12 +1,14 @@
 package com.example.my_app.models;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Orders {
+public class Orders implements Serializable {
     private String orderId;
     private Date createDate;
     private String address;
     private String uid;
+    private String paymentMethod;
 
     public Orders() {
     }
@@ -48,5 +50,13 @@ public class Orders {
 
     public void setUid(String uid) {
         this.uid = uid;
+    }
+
+    public String getPaymentMethod() {
+        return paymentMethod;
+    }
+
+    public void setPaymentMethod(String paymentMethod) {
+        this.paymentMethod = paymentMethod;
     }
 }

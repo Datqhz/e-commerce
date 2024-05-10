@@ -66,7 +66,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
         holder.tvCategory.setText(sp.getCategoryName());
         holder.tvPrice.setText(sp.getPrice()+" đ");
         holder.tvQuantity.setText(sp.getQuantity() + " Sản phẩm");
-
         ArrayList<String> listImageUrl = sp.getListImageUrl();
         if (listImageUrl != null && listImageUrl.size() > 0) {
             String imageUrl = listImageUrl.get(0);
@@ -93,7 +92,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
-                builder.setMessage("Bạn có muốn xóa danh mục này không?")
+                builder.setMessage("Bạn có muốn xóa sản phẩm này không?")
                         .setPositiveButton("Có", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {

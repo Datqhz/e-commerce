@@ -79,7 +79,7 @@ public class AddProduct extends AppCompatActivity {
                 if(o.getData() != null && o.getData().getClipData() != null){
                     int count = o.getData().getClipData().getItemCount();
                     for(int i = 0; i < count; i++){
-                        if(uriArrayList.size() < 15){
+                        if(uriArrayList.size() < 8){
                             imageUri = o.getData().getClipData().getItemAt(i).getUri();
 
                             uriArrayList.add(imageUri);
@@ -89,7 +89,7 @@ public class AddProduct extends AppCompatActivity {
                     }
                     productAdapterImage.notifyDataSetChanged();
                 } else if (o.getData().getData() != null) {
-                    if(uriArrayList.size() < 15){
+                    if(uriArrayList.size() < 8){
                         //imageUrl = o.getData().getData().getPath();
                         imageUri = o.getData().getData();
                         uriArrayList.add(imageUri);
@@ -98,8 +98,6 @@ public class AddProduct extends AppCompatActivity {
                     }
                 }
                 productAdapterImage.notifyDataSetChanged();
-            }else{
-                Toast.makeText(AddProduct.this, "Vui lòng chọn hình ảnh sản phẩm", Toast.LENGTH_LONG).show();
             }
         }
     });
@@ -167,7 +165,7 @@ public class AddProduct extends AppCompatActivity {
                 });
     }
     private void getProductName() {
-        firestore.collection("products")
+        firestore.collection("products").whereEqualTo("uid",GlobalVariable.userInfo.getUid())
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
@@ -223,8 +221,6 @@ public class AddProduct extends AppCompatActivity {
         }
         intent.setAction(Intent.ACTION_GET_CONTENT);
         activityResultLauncher.launch(Intent.createChooser(intent, "Chọn hình ảnh"));
-
-
     }
     private void uploadImage() {
         String productName = (edtProductName.getText().toString().replaceAll("\\s+", " ")).trim().toLowerCase();

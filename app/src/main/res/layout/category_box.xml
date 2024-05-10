@@ -32,6 +32,8 @@
                 android:gravity="center"
                 android:textSize="16sp"
                 android:padding="6dp"
+                android:maxLines="1"
+                android:ellipsize="end"
                 android:text="TextView" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>

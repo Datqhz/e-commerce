@@ -67,9 +67,9 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
                 @Override
                 public void onClick(View v) {
                     if (holder.checkBox.isChecked()) {
-                        list_0.add(list.get(holder.getAdapterPosition()));
+                        list_0.add(list.get(holder.getBindingAdapterPosition()));
                     } else {
-                        list_0.remove(list.get(holder.getAdapterPosition()));
+                        list_0.remove(list.get(holder.getBindingAdapterPosition()));
                     }
                     quantityListener.onQuantityChange(list_0, cartDetailList);
                 }

@@ -1,10 +1,14 @@
 package com.example.my_app.screens.user;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -13,7 +17,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.my_app.R;
@@ -30,9 +36,12 @@ import com.google.android.flexbox.JustifyContent;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +52,7 @@ public class HomeScreen extends AppCompatActivity {
     private ProgressBar categoryProgressBar, productProgressBar;
     private BottomNavigationView bottomNavigationView;
     private ImageButton homeScreenCartBtn;
+    private TextView searchBox;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,18 +75,53 @@ public class HomeScreen extends AppCompatActivity {
         productProgressBar = findViewById(R.id.productProgressBar);
         homeScreenCartBtn = findViewById(R.id.home_screen_cart_button);
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
+        searchBox = findViewById(R.id.home_screen_search_box);
     }
 
     public void setEvent() {
+        searchBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(HomeScreen.this, SearchByName.class);
+                startActivity(intent);
+            }
+        });
+
+        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                Fragment selectedFragment = null;
+                Intent selectedActivity = null;
+                int id = menuItem.getItemId();
+                if (id == R.id.navigation_home) {
+                    selectedActivity = new Intent(HomeScreen.this, HomeScreen.class);
+                    startActivity(selectedActivity);
+                } else if (id == R.id.navigation_category) {
+                    selectedFragment = new CategoryScreen();
+                } else if (id == R.id.navigation_profile) {
+                    selectedFragment = new ProfileScreen();
+                }
+                if (selectedFragment != null) {
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.home_fragment_container, selectedFragment)
+                            .addToBackStack("")
+                            .commit();
+                }
+                return true;
+            }
+        });
+
         RecyclerView categoryRecyclerView = findViewById(R.id.categories);
         categoryRecyclerView.setHasFixedSize(true);
 
-        FlexboxLayoutManager categoryLayoutManager =
-                new FlexboxLayoutManager(this, FlexDirection.ROW, FlexWrap.WRAP);
-        categoryLayoutManager.setAlignItems(AlignItems.CENTER);
-        categoryLayoutManager.setJustifyContent(JustifyContent.CENTER);
-        categoryRecyclerView.setLayoutManager(categoryLayoutManager);
-
+//        FlexboxLayoutManager categoryLayoutManager =
+//                new FlexboxLayoutManager(this, FlexDirection.ROW, FlexWrap.WRAP);
+//        categoryLayoutManager.setAlignItems(AlignItems.CENTER);
+//        categoryLayoutManager.setJustifyContent(JustifyContent.CENTER);
+//        categoryRecyclerView.setLayoutManager(categoryLayoutManager);
+        LinearLayoutManager horizontalLayoutManager
+                = new LinearLayoutManager(HomeScreen.this, LinearLayoutManager.HORIZONTAL, false);
+        categoryRecyclerView.setLayoutManager(horizontalLayoutManager);
         RecyclerView productRecyclerView = findViewById(R.id.products);
         productRecyclerView.setHasFixedSize(true);
 
@@ -88,7 +133,15 @@ public class HomeScreen extends AppCompatActivity {
         List<Category> categories = new ArrayList<>();
         List<Product> products = new ArrayList<>();
 
-        BuyerCategoryAdapter categoryAdapter = new BuyerCategoryAdapter(categories, HomeScreen.this);
+        BuyerCategoryAdapter categoryAdapter = new BuyerCategoryAdapter(categories, HomeScreen.this,
+                new BuyerCategoryAdapter.OnCategoryClickedListener() {
+                    @Override
+                    public void onCategoryClick(Category category) {
+                        Intent intent = new Intent(HomeScreen.this, ProductByCategory.class);
+                        intent.putExtra("category", category);
+                        startActivity(intent);
+                    }
+                });
         categoryRecyclerView.setAdapter(categoryAdapter);
 
         BuyerProductAdapter productAdapter = new BuyerProductAdapter(products, HomeScreen.this,
@@ -120,7 +173,7 @@ public class HomeScreen extends AppCompatActivity {
             }
         });
 
-        db.collection("categories").limit(4).get().
+        db.collection("categories").get().
                 addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
