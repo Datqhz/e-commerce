@@ -157,15 +157,18 @@ public class MerOrderAdapter extends RecyclerView.Adapter<MerOrderAdapter.MyView
                         }
                     });
                     holder.tvStatus.setText("Đơn hàng đang chờ xác nhận");
+                    holder.btnNextUp.setVisibility(View.VISIBLE);
                 }else if(temp.get(0).getStatusId().equals("rgNCIrNNoNaxothCyNe8")){ // da huy
                     holder.btnNextUp.setVisibility(View.GONE);
+                    holder.btnCancel.setVisibility(View.GONE);
                     holder.tvStatus.setText("Đơn hàng đã bị hủy");
                 }else if(temp.get(0).getStatusId().equals("IWjbS9pxytwmbyxRXcNi")){//dagiao
-                    holder.btnNextUp.setText("Đánh giá");
                     holder.tvStatus.setText("Đơn hàng đã giao thành công");
                     holder.btnNextUp.setVisibility(View.GONE);
+                    holder.btnCancel.setVisibility(View.GONE);
                 }else {
                     holder.tvStatus.setText("Đơn hàng đang trên đường đến bạn");
+                    holder.btnNextUp.setVisibility(View.VISIBLE);
                 }
                 holder.btnNextUp.setOnClickListener(new View.OnClickListener() {
                     @Override

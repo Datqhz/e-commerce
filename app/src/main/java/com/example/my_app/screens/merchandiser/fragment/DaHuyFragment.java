@@ -57,40 +57,30 @@ public class DaHuyFragment extends Fragment {
 
     public void getOrdersList(){
         List<String> orderOfShop = new ArrayList<>();
-        // query to get all order_detail
         db.collection("order_detail").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 List<OrderDetail> temp = new ArrayList<>();
                 List<DocumentSnapshot> list = queryDocumentSnapshots.getDocuments();
-                // map order detail to OrderDetail class and add it into temp List
                 for (int i = 0; i < list.size(); i++) {
                     DocumentSnapshot doc = list.get(i);
                     temp.add(doc.toObject(OrderDetail.class));
                     if (i == list.size() - 1) {
-                        // for-loop to find product information of order detail
                         for(OrderDetail dt : temp){
                             db.collection("products").document(dt.getProductId()).addSnapshotListener(new EventListener<DocumentSnapshot>() {
                                 @Override
                                 public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
                                     Product product = value.toObject(Product.class);
-                                    //check if product belongs to the shop has uid is GlobalVariable.userInfo.getUid()
-                                    // -> add order id to orderOfShop if it doesn't exits in this list
                                     if(product.getUid().equals(GlobalVariable.userInfo.getUid())){
                                         if(!orderOfShop.contains(dt.getOrderId())){
                                             orderOfShop.add(dt.getOrderId());
                                         }
                                     }
-                                    // if "dt" is the end of items in temp,
-                                    // query to orders collection to get all order has orderId is in "orderOfShop" list
                                     if (temp.indexOf(dt) == temp.size()-1){
-                                        // if shop has order -> get order information
                                         if(orderOfShop.size()>0){
                                             db.collection("orders").whereIn("orderId", orderOfShop).addSnapshotListener(new EventListener<QuerySnapshot>() {
                                                 @Override
                                                 public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                                                    // clear all items in orderList
-                                                    // and add new order satisfying condition (is in "orderOfShop:)
 
                                                     orderList.clear();
                                                     List<DocumentSnapshot> list = value.getDocuments();
@@ -105,11 +95,8 @@ public class DaHuyFragment extends Fragment {
                                                             // Chuyển đổi Timestamp thành java.util.Date
                                                             Date date = timestamp.toDate();
                                                             orders.setCreateDate(date);
-                                                            orderList.add(orders);
                                                         }
-                                                        //after all, call getOrderPending to do task.
-                                                        // in this case, orderPending will find orders with the newest ds_detail
-                                                        // having dsId of "rgNCIrNNoNaxothCyNe8"(da huy ;
+                                                        orderList.add(orders);
                                                         if(i == list.size()-1){
                                                             getOrderCancel();
                                                         }
